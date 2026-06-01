@@ -1,0 +1,65 @@
+{
+  "name": "ProjectSubmission",
+  "type": "object",
+  "properties": {
+    "student_id": {
+      "type": "string"
+    },
+    "student_name": {
+      "type": "string"
+    },
+    "unit_id": {
+      "type": "string"
+    },
+    "unit_title": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "submitted",
+        "reviewed",
+        "approved",
+        "needs_revision"
+      ],
+      "default": "submitted"
+    },
+    "admin_comments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "line_number": {
+            "type": "number"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "author_name": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "grade": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "student_id",
+    "unit_id",
+    "code"
+  ]
+}

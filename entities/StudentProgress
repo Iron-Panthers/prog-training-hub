@@ -1,0 +1,45 @@
+{
+  "name": "StudentProgress",
+  "type": "object",
+  "properties": {
+    "student_id": {
+      "type": "string"
+    },
+    "unit_id": {
+      "type": "string"
+    },
+    "slideshow_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "exercises_completed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "quiz_score": {
+      "type": "number"
+    },
+    "quiz_attempts": {
+      "type": "number",
+      "default": 0
+    },
+    "quiz_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "project_submitted": {
+      "type": "boolean",
+      "default": false
+    },
+    "overall_progress": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "student_id",
+    "unit_id"
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "name": "Unit",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "topic": {
+      "type": "string",
+      "enum": [
+        "basics",
+        "oop",
+        "data-structures",
+        "algorithms",
+        "frc-specific",
+        "advanced"
+      ]
+    },
+    "order": {
+      "type": "number"
+    },
+    "is_published": {
+      "type": "boolean",
+      "default": false
+    },
+    "slideshow_url": {
+      "type": "string"
+    },
+    "slideshow_embed": {
+      "type": "string"
+    },
+    "exercises": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "starter_code": {
+            "type": "string"
+          },
+          "solution_code": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "quiz_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "correct_index": {
+            "type": "number"
+          },
+          "explanation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "project": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "starter_code": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "title",
+    "topic"
+  ]
+}
