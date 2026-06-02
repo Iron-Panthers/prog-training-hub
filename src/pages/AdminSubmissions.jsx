@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { ProjectSubmission, QuizSubmission } from "@/api/entities";
 import { ArrowLeft, MessageSquare, CheckCircle, AlertCircle, Clock, Send, Loader2, Filter } from "lucide-react";
 
 function SubmissionsList({ user }) {
@@ -12,8 +12,8 @@ function SubmissionsList({ user }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.ProjectSubmission.list("-created_date", 50),
-      base44.entities.QuizSubmission.list("-created_date", 50),
+      ProjectSubmission.list("-created_at", 50),
+      QuizSubmission.list("-created_at", 50),
     ]).then(([s, q]) => {
       setSubmissions(s);
       setQuizzes(q);
@@ -89,7 +89,7 @@ function SubmissionsList({ user }) {
                         </span>
                         <span className="text-muted-foreground text-sm"> — {sub.unit_title}</span>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {new Date(sub.created_date).toLocaleDateString()} · {sub.admin_comments?.length || 0} comments
+                          {new Date(sub.created_at).toLocaleDateString()} · {sub.admin_comments?.length || 0} comments
                         </p>
                       </div>
                     </div>
@@ -117,7 +117,7 @@ function SubmissionsList({ user }) {
                   <div>
                     <span className="font-semibold text-foreground text-sm">{q.student_name}</span>
                     <span className="text-muted-foreground text-sm"> — {q.unit_title}</span>
-                    <p className="text-xs text-muted-foreground mt-0.5">{new Date(q.created_date).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{new Date(q.created_at).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right">
                     <span className={`text-lg font-black ${q.percentage >= 70 ? "text-green-400" : "text-red-400"}`}>{q.percentage}%</span>
@@ -142,7 +142,7 @@ function SubmissionReview({ user }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    base44.entities.ProjectSubmission.filter({ id }).then(([s]) => {
+    ProjectSubmission.filter({ id }).then(([s]) => {
       setSub(s || null);
       setStatus(s?.status || "submitted");
       setLoading(false);
@@ -159,7 +159,7 @@ function SubmissionReview({ user }) {
       author_name: user.full_name,
       created_at: new Date().toISOString(),
     };
-    const updated = await base44.entities.ProjectSubmission.update(sub.id, {
+    const updated = await ProjectSubmission.update(sub.id, {
       admin_comments: [...(sub.admin_comments || []), comment],
       status: status,
     });
@@ -170,7 +170,7 @@ function SubmissionReview({ user }) {
 
   const updateStatus = async (s) => {
     setStatus(s);
-    await base44.entities.ProjectSubmission.update(sub.id, { status: s });
+    await ProjectSubmission.update(sub.id, { status: s });
     setSub({ ...sub, status: s });
   };
 

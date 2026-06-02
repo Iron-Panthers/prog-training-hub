@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { Announcement, Unit, StudentProgress } from "@/api/entities";
 import { BookOpen, Code2, TrendingUp, Bell, ChevronRight, Pin, Zap, Trophy, Clock } from "lucide-react";
 
 const topicColors = {
@@ -29,9 +29,9 @@ export default function StudentDashboard({ user }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Announcement.filter({ is_published: true }, "-created_date", 5),
-      base44.entities.Unit.filter({ is_published: true }, "order", 20),
-      base44.entities.StudentProgress.filter({ student_id: user.id }),
+      Announcement.filter({ is_published: true }, "-created_at", 5),
+      Unit.filter({ is_published: true }, "order", 20),
+      StudentProgress.filter({ student_id: user.id }),
     ]).then(([ann, u, prog]) => {
       setAnnouncements(ann);
       setUnits(u);

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
-import { Play, RotateCcw, Save, Loader2, Code2, ChevronDown } from "lucide-react";
+import { invokeLLM } from "@/api/entities";
+import { Play, RotateCcw, Loader2, Code2, ChevronDown } from "lucide-react";
 
 const SNIPPETS = [
   { label: "Hello World", code: `public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, Iron Panthers! 🐾");\n    }\n}` },
@@ -24,14 +24,14 @@ export default function SandboxPage() {
     setError(null);
     setOutput("⚙️ Compiling and running...");
     try {
-      const res = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a Java code executor simulator. Execute the following Java code and return ONLY the console output, exactly as it would appear. If there's a compilation error, return it in standard Java compiler error format. If the code runs successfully with no output, return "(no output)".
+      const res = await invokeLLM(
+        `You are a Java code executor simulator. Execute the following Java code and return ONLY the console output, exactly as it would appear. If there's a compilation error, return it in standard Java compiler error format. If the code runs successfully with no output, return "(no output)".
 
 Java code:
 \`\`\`java
 ${code}
-\`\`\``,
-      });
+\`\`\``
+      );
       setOutput(res);
     } catch (e) {
       setError("Execution failed. Please try again.");

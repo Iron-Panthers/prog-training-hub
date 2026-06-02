@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { invokeLLM } from "@/api/entities";
 import { Play, RotateCcw, CheckCircle, Loader2 } from "lucide-react";
 
 export default function JavaIDE({ initialCode = "", onComplete, showCompleteButton = true, height = "300px" }) {
@@ -14,14 +14,14 @@ export default function JavaIDE({ initialCode = "", onComplete, showCompleteButt
     setError(null);
     setOutput("Running...");
     try {
-      const res = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a Java code executor simulator. Execute the following Java code and return what the output would be. Only return the console output, nothing else. If there's a compilation error, return it as it would appear in the console. If the code runs successfully with no output, return "(no output)".
+      const res = await invokeLLM(
+        `You are a Java code executor simulator. Execute the following Java code and return what the output would be. Only return the console output, nothing else. If there's a compilation error, return it as it would appear in the console. If the code runs successfully with no output, return "(no output)".
 
 Java code:
 \`\`\`java
 ${code}
-\`\`\``,
-      });
+\`\`\``
+      );
       setOutput(res);
     } catch (e) {
       setError("Failed to run code. Try again.");

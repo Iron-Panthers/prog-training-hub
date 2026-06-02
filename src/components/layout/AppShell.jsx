@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/lib/AuthContext";
 import {
-  Home, BookOpen, Code2, Bell, LayoutDashboard,
+  Home, BookOpen, Code2, LayoutDashboard,
   ChevronLeft, ChevronRight, LogOut, Menu, X,
-  ClipboardList, Users, Megaphone, Settings
+  ClipboardList, Megaphone
 } from "lucide-react";
 
 const studentNav = [
@@ -24,13 +24,9 @@ export default function AppShell({ user, children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
+  const { logout } = useAuth();
   const isAdmin = user?.role === "admin";
   const nav = isAdmin ? adminNav : studentNav;
-
-  const handleLogout = () => {
-    base44.auth.logout("/");
-  };
 
   const NavItem = ({ item }) => {
     const active = location.pathname === item.path ||
@@ -109,7 +105,7 @@ export default function AppShell({ user, children }) {
             </div>
           )}
           <button
-            onClick={handleLogout}
+            onClick={logout}
             className="text-white/40 hover:text-orange transition-colors flex-shrink-0"
             title="Logout"
           >

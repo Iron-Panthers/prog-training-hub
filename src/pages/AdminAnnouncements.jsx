@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { Announcement, uploadFile } from "@/api/entities";
 import { Plus, Trash2, Pin, Eye, EyeOff, Image, Send, X, Loader2 } from "lucide-react";
 
 const TYPES = ["update", "reminder", "important"];
@@ -19,7 +19,7 @@ export default function AdminAnnouncements({ user }) {
   }, []);
 
   const load = async () => {
-    const ann = await base44.entities.Announcement.list("-created_date", 30);
+    const ann = await Announcement.list("-created_at", 30);
     setAnnouncements(ann);
     setLoading(false);
   };
@@ -37,10 +37,9 @@ export default function AdminAnnouncements({ user }) {
     setSubmitting(true);
     let imageUrl = form.image_url;
     if (imageFile) {
-      const res = await base44.integrations.Core.UploadFile({ file: imageFile });
-      imageUrl = res.file_url;
+      imageUrl = await uploadFile(imageFile, 'announcements');
     }
-    await base44.entities.Announcement.create({
+    await Announcement.create({
       ...form,
       image_url: imageUrl,
       author_id: user.id,
@@ -56,17 +55,17 @@ export default function AdminAnnouncements({ user }) {
   };
 
   const togglePin = async (ann) => {
-    await base44.entities.Announcement.update(ann.id, { is_pinned: !ann.is_pinned });
+    await Announcement.update(ann.id, { is_pinned: !ann.is_pinned });
     load();
   };
 
   const togglePublish = async (ann) => {
-    await base44.entities.Announcement.update(ann.id, { is_published: !ann.is_published });
+    await Announcement.update(ann.id, { is_published: !ann.is_published });
     load();
   };
 
   const deleteAnn = async (id) => {
-    await base44.entities.Announcement.delete(id);
+    await Announcement.delete(id);
     load();
   };
 

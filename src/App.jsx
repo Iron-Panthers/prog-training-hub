@@ -4,9 +4,7 @@ import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
-import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
 
 // Pages
 import Login from './pages/Login';
@@ -23,21 +21,9 @@ import { SubmissionsList, SubmissionReview } from './pages/AdminSubmissions';
 import AppShell from './components/layout/AppShell';
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
-  const [user, setUser] = useState(null);
-  const [loadingUser, setLoadingUser] = useState(true);
+  const { user, isLoadingAuth, navigateToLogin } = useAuth();
 
-  useEffect(() => {
-    base44.auth.isAuthenticated().then(async (authed) => {
-      if (authed) {
-        const me = await base44.auth.me();
-        setUser(me);
-      }
-      setLoadingUser(false);
-    });
-  }, []);
-
-  if (isLoadingPublicSettings || isLoadingAuth || loadingUser) {
+  if (isLoadingAuth) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-navy">
         <div className="text-center">
@@ -46,15 +32,6 @@ const AuthenticatedApp = () => {
         </div>
       </div>
     );
-  }
-
-  if (authError) {
-    if (authError.type === 'user_not_registered') {
-      return <UserNotRegisteredError />;
-    } else if (authError.type === 'auth_required') {
-      navigateToLogin();
-      return null;
-    }
   }
 
   const isAdmin = user?.role === "admin";

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
-import { Users, BookOpen, Megaphone, ClipboardList, TrendingUp, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { Unit, Announcement, ProjectSubmission, QuizSubmission } from "@/api/entities";
+import { BookOpen, Megaphone, ClipboardList, TrendingUp, AlertCircle, CheckCircle, Clock } from "lucide-react";
 
 export default function AdminDashboard({ user }) {
   const [stats, setStats] = useState({ units: 0, announcements: 0, submissions: 0, quizzes: 0 });
@@ -10,10 +10,10 @@ export default function AdminDashboard({ user }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Unit.list(),
-      base44.entities.Announcement.list(),
-      base44.entities.ProjectSubmission.list("-created_date", 5),
-      base44.entities.QuizSubmission.list("-created_date", 5),
+      Unit.list(),
+      Announcement.list(),
+      ProjectSubmission.list("-created_at", 5),
+      QuizSubmission.list("-created_at", 5),
     ]).then(([units, ann, subs, quizzes]) => {
       setStats({ units: units.length, announcements: ann.length, submissions: subs.length, quizzes: quizzes.length });
       setRecentSubmissions(subs);
@@ -119,7 +119,7 @@ export default function AdminDashboard({ user }) {
                       <span className="text-muted-foreground text-xs">— {sub.unit_title}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5 ml-6">
-                      {new Date(sub.created_date).toLocaleDateString()}
+                      {new Date(sub.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full border font-semibold ${

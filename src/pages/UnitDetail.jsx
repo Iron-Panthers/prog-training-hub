@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { Unit, StudentProgress } from "@/api/entities";
 import { ArrowLeft, BookOpen, Code2, HelpCircle, Rocket, CheckCircle } from "lucide-react";
 import JavaIDE from "@/components/JavaIDE";
 import QuizSection from "@/components/QuizSection";
@@ -23,8 +23,8 @@ export default function UnitDetail({ user }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Unit.filter({ id }),
-      base44.entities.StudentProgress.filter({ student_id: user.id, unit_id: id }),
+      Unit.filter({ id }),
+      StudentProgress.filter({ student_id: user.id, unit_id: id }),
     ]).then(([units, progs]) => {
       setUnit(units[0] || null);
       setProgress(progs[0] || null);
@@ -40,11 +40,11 @@ export default function UnitDetail({ user }) {
 
   const upsertProgress = async (data) => {
     if (progress?.id) {
-      const updated = await base44.entities.StudentProgress.update(progress.id, { ...progress, ...data });
+      const updated = await StudentProgress.update(progress.id, { ...progress, ...data });
       setProgress(updated);
       return updated;
     } else {
-      const created = await base44.entities.StudentProgress.create({
+      const created = await StudentProgress.create({
         student_id: user.id,
         unit_id: id,
         ...data,
@@ -64,7 +64,7 @@ export default function UnitDetail({ user }) {
     if (unit.quiz_questions?.length > 0) { total++; if (p.quiz_completed) score++; }
     if (unit.project?.title) { total++; if (p.project_submitted) score++; }
     const pct = total > 0 ? Math.round((score / total) * 100) : 0;
-    base44.entities.StudentProgress.update(p.id, { overall_progress: pct });
+    StudentProgress.update(p.id, { overall_progress: pct });
   };
 
   if (loading) {

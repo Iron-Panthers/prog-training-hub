@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { Unit } from "@/api/entities";
 import { Plus, Pencil, Trash2, Eye, EyeOff, BookOpen, Save, X, ChevronDown, ChevronUp } from "lucide-react";
 
 const TOPICS = ["basics", "oop", "data-structures", "algorithms", "frc-specific", "advanced"];
@@ -25,7 +25,7 @@ export default function AdminUnits() {
   useEffect(() => { load(); }, []);
 
   const load = async () => {
-    const u = await base44.entities.Unit.list("order", 50);
+    const u = await Unit.list("order", 50);
     setUnits(u);
     setLoading(false);
   };
@@ -47,9 +47,9 @@ export default function AdminUnits() {
   const save = async () => {
     setSaving(true);
     if (editing === "new") {
-      await base44.entities.Unit.create(form);
+      await Unit.create(form);
     } else {
-      await base44.entities.Unit.update(editing, form);
+      await Unit.update(editing, form);
     }
     setEditing(null);
     setSaving(false);
@@ -57,12 +57,12 @@ export default function AdminUnits() {
   };
 
   const togglePublish = async (unit) => {
-    await base44.entities.Unit.update(unit.id, { is_published: !unit.is_published });
+    await Unit.update(unit.id, { is_published: !unit.is_published });
     load();
   };
 
   const deleteUnit = async (id) => {
-    await base44.entities.Unit.delete(id);
+    await Unit.delete(id);
     load();
   };
 

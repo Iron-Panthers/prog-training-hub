@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { Unit, StudentProgress } from "@/api/entities";
 import { BookOpen, Search, Trophy, TrendingUp } from "lucide-react";
 
 const topicColors = {
@@ -32,8 +32,8 @@ export default function UnitsPage({ user }) {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.Unit.filter({ is_published: true }, "order", 50),
-      base44.entities.StudentProgress.filter({ student_id: user.id }),
+      Unit.filter({ is_published: true }, "order", 50),
+      StudentProgress.filter({ student_id: user.id }),
     ]).then(([u, p]) => {
       setUnits(u);
       setProgress(p);

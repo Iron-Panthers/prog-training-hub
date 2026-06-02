@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { QuizSubmission } from "@/api/entities";
 import { CheckCircle, XCircle, Trophy, RotateCcw } from "lucide-react";
 
 export default function QuizSection({ unit, user, progress, onComplete }) {
@@ -23,7 +23,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
     setScore(s);
     setSubmitted(true);
     const pct = Math.round((s / questions.length) * 100);
-    await base44.entities.QuizSubmission.create({
+    await QuizSubmission.create({
       student_id: user.id,
       student_name: user.full_name,
       unit_id: unit.id,

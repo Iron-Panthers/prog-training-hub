@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { ProjectSubmission } from "@/api/entities";
 import { Rocket, CheckCircle, Send, List } from "lucide-react";
 import JavaIDE from "@/components/JavaIDE";
 
@@ -12,7 +12,7 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
   const handleSubmit = async () => {
     if (!code.trim()) return;
     setSubmitting(true);
-    await base44.entities.ProjectSubmission.create({
+    await ProjectSubmission.create({
       student_id: user.id,
       student_name: user.full_name,
       unit_id: unit.id,

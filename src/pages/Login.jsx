@@ -1,18 +1,23 @@
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { isAuthenticated, isLoadingAuth } = useAuth();
 
   useEffect(() => {
-    base44.auth.isAuthenticated().then((authed) => {
-      if (authed) navigate("/dashboard");
-    });
-  }, []);
+    if (!isLoadingAuth && isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, isLoadingAuth, navigate]);
 
   const handleGoogleLogin = () => {
-    base44.auth.loginWithProvider("google", "/dashboard");
+    supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/dashboard` },
+    });
   };
 
   return (
