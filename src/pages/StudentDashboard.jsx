@@ -60,7 +60,7 @@ export default function StudentDashboard({ user }) {
             <div className="animate-fade-in">
               <p className="text-white/50 text-sm font-medium mb-1">Welcome back,</p>
               <h1 className="text-3xl font-black text-white">
-                {user?.full_name?.split(" ")[0]} <span className="text-orange">🐾</span>
+                {user?.name?.split(" ")[0]} <span className="text-orange">🐾</span>
               </h1>
               <p className="text-white/40 text-sm mt-1">Ready to write some Java?</p>
             </div>

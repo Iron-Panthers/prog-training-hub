@@ -25,7 +25,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
     const pct = Math.round((s / questions.length) * 100);
     await QuizSubmission.create({
       student_id: user.id,
-      student_name: user.full_name,
+      student_name: user.name,
       unit_id: unit.id,
       unit_title: unit.title,
       answers: Object.values(answers),

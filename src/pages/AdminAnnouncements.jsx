@@ -43,7 +43,7 @@ export default function AdminAnnouncements({ user }) {
       ...form,
       image_url: imageUrl,
       author_id: user.id,
-      author_name: user.full_name,
+      author_name: user.name,
       is_published: true,
     });
     setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" });

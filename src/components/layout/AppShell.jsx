@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Home, BookOpen, Code2, LayoutDashboard,
   ChevronLeft, ChevronRight, LogOut, Menu, X,
@@ -24,7 +24,7 @@ export default function AppShell({ user, children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { logout } = useAuth();
+  const { signOut } = useAuth();
   const isAdmin = user?.role === "admin";
   const nav = isAdmin ? adminNav : studentNav;
 
@@ -95,17 +95,17 @@ export default function AppShell({ user, children }) {
         <div className={`flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5 ${collapsed && !mobile ? "justify-center" : ""}`}>
           <div className="w-8 h-8 rounded-full bg-orange/30 border border-orange/40 flex items-center justify-center flex-shrink-0">
             <span className="text-sm font-bold text-orange">
-              {user?.full_name?.charAt(0) || "U"}
+              {user?.name?.charAt(0) || "U"}
             </span>
           </div>
           {(!collapsed || mobile) && (
             <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate">{user?.full_name}</p>
+              <p className="text-white text-xs font-semibold truncate">{user?.name}</p>
               <p className="text-white/40 text-xs truncate">{user?.email}</p>
             </div>
           )}
           <button
-            onClick={logout}
+            onClick={signOut}
             className="text-white/40 hover:text-orange transition-colors flex-shrink-0"
             title="Logout"
           >

@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/lib/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();

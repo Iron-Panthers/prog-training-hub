@@ -3,7 +3,7 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
-import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { useState, useEffect } from "react";
 
 // Pages
@@ -21,9 +21,9 @@ import { SubmissionsList, SubmissionReview } from './pages/AdminSubmissions';
 import AppShell from './components/layout/AppShell';
 
 const AuthenticatedApp = () => {
-  const { user, isLoadingAuth, navigateToLogin } = useAuth();
+  const { user, profile, loading, navigateToLogin } = useAuth();
 
-  if (isLoadingAuth) {
+  if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-navy">
         <div className="text-center">
@@ -47,7 +47,7 @@ const AuthenticatedApp = () => {
         element={
           user ? (
             <AppShell user={user}>
-              <StudentDashboard user={user} />
+              <StudentDashboard user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
         }
@@ -57,7 +57,7 @@ const AuthenticatedApp = () => {
         element={
           user ? (
             <AppShell user={user}>
-              <UnitsPage user={user} />
+              <UnitsPage user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
         }
@@ -67,7 +67,7 @@ const AuthenticatedApp = () => {
         element={
           user ? (
             <AppShell user={user}>
-              <UnitDetail user={user} />
+              <UnitDetail user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
         }
@@ -89,7 +89,7 @@ const AuthenticatedApp = () => {
         element={
           user && isAdmin ? (
             <AppShell user={user}>
-              <AdminDashboard user={user} />
+              <AdminDashboard user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
         }
@@ -99,7 +99,7 @@ const AuthenticatedApp = () => {
         element={
           user && isAdmin ? (
             <AppShell user={user}>
-              <AdminAnnouncements user={user} />
+              <AdminAnnouncements user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
         }
@@ -109,7 +109,7 @@ const AuthenticatedApp = () => {
         element={
           user && isAdmin ? (
             <AppShell user={user}>
-              <SubmissionsList user={user} />
+              <SubmissionsList user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
         }
@@ -119,7 +119,7 @@ const AuthenticatedApp = () => {
         element={
           user && isAdmin ? (
             <AppShell user={user}>
-              <SubmissionReview user={user} />
+              <SubmissionReview user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
         }
@@ -128,7 +128,7 @@ const AuthenticatedApp = () => {
         path="/admin/units"
         element={
           user && isAdmin ? (
-            <AppShell user={user}>
+            <AppShell user={profile}>
               <AdminUnits />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />

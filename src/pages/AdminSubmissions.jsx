@@ -156,7 +156,7 @@ function SubmissionReview({ user }) {
       id: Date.now().toString(),
       line_number: parseInt(newComment.line_number) || null,
       comment: newComment.comment,
-      author_name: user.full_name,
+      author_name: user.name,
       created_at: new Date().toISOString(),
     };
     const updated = await ProjectSubmission.update(sub.id, {
