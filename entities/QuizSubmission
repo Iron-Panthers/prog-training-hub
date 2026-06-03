@@ -5,28 +5,19 @@
     "student_id": {
       "type": "string"
     },
-    "student_name": {
-      "type": "string"
-    },
     "unit_id": {
-      "type": "string"
-    },
-    "unit_title": {
       "type": "string"
     },
     "answers": {
       "type": "array",
       "items": {
-        "type": "number"
+        "type": "string"
       }
     },
     "score": {
       "type": "number"
     },
     "total_questions": {
-      "type": "number"
-    },
-    "percentage": {
       "type": "number"
     }
   },

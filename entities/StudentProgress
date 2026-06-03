@@ -18,9 +18,6 @@
         "type": "string"
       }
     },
-    "quiz_score": {
-      "type": "number"
-    },
     "quiz_attempts": {
       "type": "number",
       "default": 0
