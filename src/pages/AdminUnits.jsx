@@ -8,6 +8,19 @@ const TOPIC_LABELS = {
   "algorithms": "Algorithms", "frc-specific": "FRC Specific", "advanced": "Advanced",
 };
 
+const Section = ({ id, title, children, expandedSection, setExpandedSection }) => (
+  <div className="bg-card border border-border rounded-xl overflow-hidden">
+    <button
+      className="w-full flex items-center justify-between px-5 py-4 text-sm font-bold text-foreground hover:bg-muted transition-colors"
+      onClick={() => setExpandedSection(expandedSection === id ? "" : id)}
+    >
+      {title}
+      {expandedSection === id ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+    </button>
+    {expandedSection === id && <div className="px-5 pb-5 space-y-4 border-t border-border pt-4">{children}</div>}
+  </div>
+);
+
 const emptyUnit = {
   title: "", description: "", topic: "basics", order: 1, is_published: false,
   slideshow_embed: "", slideshow_url: "", exercises: [], quiz_questions: [],
@@ -94,19 +107,6 @@ export default function AdminUnits() {
     setForm({ ...form, quiz_questions: form.quiz_questions.filter((_, idx) => idx !== i) });
   };
 
-  const Section = ({ id, title, children }) => (
-    <div className="bg-card border border-border rounded-xl overflow-hidden">
-      <button
-        className="w-full flex items-center justify-between px-5 py-4 text-sm font-bold text-foreground hover:bg-muted transition-colors"
-        onClick={() => setExpandedSection(expandedSection === id ? "" : id)}
-      >
-        {title}
-        {expandedSection === id ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
-      </button>
-      {expandedSection === id && <div className="px-5 pb-5 space-y-4 border-t border-border pt-4">{children}</div>}
-    </div>
-  );
-
   const inputClass = "w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-orange/50";
   const labelClass = "text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-1.5";
 
@@ -140,7 +140,7 @@ export default function AdminUnits() {
               </button>
             </div>
 
-            <Section id="basic" title="📋 Basic Info">
+            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="basic" title="📋 Basic Info">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className={labelClass}>Title</label>
@@ -171,7 +171,7 @@ export default function AdminUnits() {
               </div>
             </Section>
 
-            <Section id="slideshow" title="📊 Slideshow">
+            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="slideshow" title="📊 Slideshow">
               <div>
                 <label className={labelClass}>Embed URL (Google Slides, etc.)</label>
                 <input value={form.slideshow_embed || ""} onChange={e => setForm({ ...form, slideshow_embed: e.target.value })} className={inputClass} placeholder="https://docs.google.com/presentation/d/..." />
@@ -182,7 +182,7 @@ export default function AdminUnits() {
               </div>
             </Section>
 
-            <Section id="exercises" title={`💻 Exercises (${form.exercises?.length || 0})`}>
+            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="exercises" title={`💻 Exercises (${form.exercises?.length || 0})`}>
               {form.exercises?.map((ex, i) => (
                 <div key={ex.id || i} className="border border-border rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -199,7 +199,7 @@ export default function AdminUnits() {
               </button>
             </Section>
 
-            <Section id="quiz" title={`📝 Quiz Questions (${form.quiz_questions?.length || 0})`}>
+            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="quiz" title={`📝 Quiz Questions (${form.quiz_questions?.length || 0})`}>
               {form.quiz_questions?.map((q, i) => (
                 <div key={q.id || i} className="border border-border rounded-xl p-4 space-y-3">
                   <div className="flex items-center justify-between">
@@ -238,7 +238,7 @@ export default function AdminUnits() {
               </button>
             </Section>
 
-            <Section id="project" title="🚀 Project">
+            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="project" title="🚀 Project">
               <input value={form.project?.title || ""} onChange={e => setForm({ ...form, project: { ...form.project, title: e.target.value } })} className={inputClass} placeholder="Project title" />
               <textarea value={form.project?.description || ""} onChange={e => setForm({ ...form, project: { ...form.project, description: e.target.value } })} className={`${inputClass} h-20 resize-none`} placeholder="Project description" />
               <textarea
