@@ -22,6 +22,7 @@ export default function AdminAnnouncements({ user }) {
     const ann = await Announcement.list("-created_at", 30);
     setAnnouncements(ann);
     setLoading(false);
+    console.log(ann)
   };
 
   const handleImageSelect = (e) => {
@@ -39,11 +40,10 @@ export default function AdminAnnouncements({ user }) {
     if (imageFile) {
       imageUrl = await uploadFile(imageFile, 'announcements');
     }
-    await Announcement.create({
+    const data = await Announcement.create({
       ...form,
       image_url: imageUrl,
       author_id: user.id,
-      author_name: user.name,
       is_published: true,
     });
     setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" });
