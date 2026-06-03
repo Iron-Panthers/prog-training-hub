@@ -34,7 +34,7 @@ const AuthenticatedApp = () => {
     );
   }
 
-  const isAdmin = user?.role === "admin";
+  const isAdmin = profile?.role === "teacher" || profile?.role === "admin";
 
   return (
     <Routes>

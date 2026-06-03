@@ -2,16 +2,13 @@
   "name": "ProjectSubmission",
   "type": "object",
   "properties": {
+    "id": {
+      "type": "string"
+    },
     "student_id": {
       "type": "string"
     },
-    "student_name": {
-      "type": "string"
-    },
     "unit_id": {
-      "type": "string"
-    },
-    "unit_title": {
       "type": "string"
     },
     "code": {
@@ -44,7 +41,7 @@
           "comment": {
             "type": "string"
           },
-          "author_name": {
+          "author_id": {
             "type": "string"
           },
           "created_at": {
@@ -54,7 +51,7 @@
       }
     },
     "grade": {
-      "type": "string"
+      "type": "number"
     }
   },
   "required": [
