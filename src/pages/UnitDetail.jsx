@@ -237,7 +237,6 @@ export default function UnitDetail({ user }) {
             progress={progress}
             onComplete={(score, total) => {
               upsertProgress({
-                quiz_score: score,
                 quiz_completed: true,
                 quiz_attempts: (progress?.quiz_attempts || 0) + 1,
               }).then(recalcProgress);
