@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import redLogo from "@/assets/redLogo.svg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -40,8 +41,8 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-md mx-4 animate-fade-in">
         {/* Logo / Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-orange/20 border border-orange/30 mb-6 backdrop-blur-sm">
-            <span className="text-4xl">🐾</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-red-accent border border-red-accent/50 mb-6 backdrop-blur-sm shadow-lg shadow-red-accent/30">
+            <img src={redLogo} alt="Logo" className="w-16 h-16" />
           </div>
           <div className="inline-block bg-orange/20 border border-orange/30 text-orange px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase mb-3">
             FRC Team 5026

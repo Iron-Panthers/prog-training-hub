@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import redLogo from "@/assets/redLogo.svg";
 import {
   Home, BookOpen, Code2, LayoutDashboard,
   ChevronLeft, ChevronRight, LogOut, Menu, X,
@@ -53,8 +54,8 @@ export default function AppShell({ user, children }) {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-white/10 ${collapsed && !mobile ? "justify-center" : ""}`}>
-        <div className="w-9 h-9 rounded-xl bg-orange/20 border border-orange/30 flex items-center justify-center flex-shrink-0">
-          <span className="text-lg">🐾</span>
+        <div className="w-9 h-9 rounded-xl bg-red-accent border border-red-accent/50 flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-accent/20">
+          <img src={redLogo} alt="Logo" className="w-7 h-7" />
         </div>
         {(!collapsed || mobile) && (
           <div>
@@ -138,9 +139,9 @@ export default function AppShell({ user, children }) {
       <div className="md:hidden">
         <div className="fixed top-0 left-0 right-0 h-14 bg-navy border-b border-white/10 flex items-center justify-between px-4 z-30">
           <div className="flex items-center gap-2">
-            <span className="text-xl">🐾</span>
-            <span className="text-white font-black text-sm">Iron Panthers</span>
-          </div>
+              <img src={redLogo} alt="Logo" className="w-7 h-7" />
+              <span className="text-white font-black text-sm">Iron Panthers</span>
+            </div>
           <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white/60 hover:text-white">
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>

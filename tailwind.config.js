@@ -52,6 +52,7 @@ module.exports = {
         orange: 'hsl(var(--orange))',
         'orange-light': 'hsl(var(--orange-light))',
         gold: 'hsl(var(--gold))',
+        'red-accent': 'hsl(var(--red-accent))',
   			chart: {
   				'1': 'hsl(var(--chart-1))',
   				'2': 'hsl(var(--chart-2))',
