@@ -63,6 +63,7 @@ export async function uploadAvatar(
   const { data } = supabase.storage.from("avatars").getPublicUrl(path);
   const publicUrl = data.publicUrl;
 
+  console.log(publicUrl, data, userId);
   await updateProfile(userId, { avatar_url: publicUrl });
   return publicUrl;
 }
