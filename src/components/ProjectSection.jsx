@@ -18,6 +18,7 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
       code,
       notes,
       status: "submitted",
+      created_at: new Date().toISOString(),
     });
     setSubmitted(true);
     onSubmit?.();

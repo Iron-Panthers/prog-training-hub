@@ -47,7 +47,7 @@ const AuthenticatedApp = () => {
         path="/dashboard"
         element={
           user ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <StudentDashboard user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
@@ -57,7 +57,7 @@ const AuthenticatedApp = () => {
         path="/units"
         element={
           user ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <UnitsPage user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
@@ -67,7 +67,7 @@ const AuthenticatedApp = () => {
         path="/units/:id"
         element={
           user ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <UnitDetail user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
@@ -77,7 +77,7 @@ const AuthenticatedApp = () => {
         path="/sandbox"
         element={
           user ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <SandboxPage />
             </AppShell>
           ) : <Navigate to="/" />
@@ -89,7 +89,7 @@ const AuthenticatedApp = () => {
         path="/admin"
         element={
           user && isAdmin ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <AdminDashboard user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
@@ -99,7 +99,7 @@ const AuthenticatedApp = () => {
         path="/admin/announcements"
         element={
           user && isAdmin ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <AdminAnnouncements user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
@@ -109,7 +109,7 @@ const AuthenticatedApp = () => {
         path="/admin/submissions"
         element={
           user && isAdmin ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <SubmissionsList user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
@@ -119,7 +119,7 @@ const AuthenticatedApp = () => {
         path="/admin/submissions/:id"
         element={
           user && isAdmin ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <SubmissionReview user={profile} />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
@@ -129,7 +129,7 @@ const AuthenticatedApp = () => {
         path="/admin/units"
         element={
           user && isAdmin ? (
-            <AppShell user={profile}>
+            <AppShell authUser={user} profile={profile}>
               <AdminUnits />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
@@ -140,7 +140,7 @@ const AuthenticatedApp = () => {
         path="/settings"
         element={
           user ? (
-            <AppShell user={user}>
+            <AppShell authUser={user} profile={profile}>
               <SettingsPage />
             </AppShell>
           ) : <Navigate to="/" />

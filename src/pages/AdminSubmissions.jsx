@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ProjectSubmission, QuizSubmission } from "@/api/entities";
 import { ArrowLeft, MessageSquare, CheckCircle, AlertCircle, Clock, Send, Loader2, Filter } from "lucide-react";
+import { formatDateValue } from "@/utils";
 
 function SubmissionsList({ user }) {
   const [submissions, setSubmissions] = useState([]);
@@ -89,7 +90,7 @@ function SubmissionsList({ user }) {
                         </span>
                         <span className="text-muted-foreground text-sm"> — {sub.unit_title}</span>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {new Date(sub.created_at).toLocaleDateString()} · {sub.admin_comments?.length || 0} comments
+                          {formatDateValue(sub.created_at)} · {sub.admin_comments?.length || 0} comments
                         </p>
                       </div>
                     </div>
@@ -117,7 +118,7 @@ function SubmissionsList({ user }) {
                   <div>
                     <span className="font-semibold text-foreground text-sm">{q.student_name}</span>
                     <span className="text-muted-foreground text-sm"> — {q.unit_title}</span>
-                    <p className="text-xs text-muted-foreground mt-0.5">{new Date(q.created_at).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{formatDateValue(q.created_at)}</p>
                   </div>
                   <div className="text-right">
                     <span className={`text-lg font-black ${q.percentage >= 70 ? "text-green-400" : "text-red-400"}`}>{q.percentage}%</span>
@@ -291,7 +292,7 @@ function SubmissionReview({ user }) {
                       </span>
                     )}
                     <p className="text-sm text-foreground">{c.comment}</p>
-                    <p className="text-xs text-muted-foreground mt-1.5">{c.author_name} · {new Date(c.created_at).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground mt-1.5">{c.author_name} · {formatDateValue(c.created_at)}</p>
                   </div>
                 ))}
               </div>

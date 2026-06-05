@@ -6,6 +6,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const [isRetaking, setIsRetaking] = useState(false);
 
   const questions = unit.quiz_questions || [];
 
@@ -29,6 +30,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
       answers: Object.values(answers),
       score: s,
       total_questions: questions.length,
+      created_at: new Date().toISOString(),
     });
     onComplete?.(s, questions.length);
   };
@@ -37,9 +39,10 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
     setAnswers({});
     setSubmitted(false);
     setScore(0);
+    setIsRetaking(true);
   };
 
-  if (progress?.quiz_completed && !submitted) {
+  if (progress?.quiz_completed && !submitted && !isRetaking) {
     return (
       <div className="text-center py-12 animate-fade-in">
         <Trophy className="w-14 h-14 text-gold mx-auto mb-4" />

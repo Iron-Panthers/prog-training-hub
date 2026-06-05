@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Unit, Announcement, ProjectSubmission, QuizSubmission } from "@/api/entities";
 import { BookOpen, Megaphone, ClipboardList, TrendingUp, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { formatDateValue } from "@/utils";
 
 export default function AdminDashboard({ user }) {
   const [stats, setStats] = useState({ units: 0, announcements: 0, submissions: 0, quizzes: 0 });
@@ -119,7 +120,7 @@ export default function AdminDashboard({ user }) {
                       <span className="text-muted-foreground text-xs">— {sub.unit_title}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5 ml-6">
-                      {new Date(sub.created_at).toLocaleDateString()}
+                      {formatDateValue(sub.created_at)}
                     </p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full border font-semibold ${

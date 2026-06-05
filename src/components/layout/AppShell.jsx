@@ -22,12 +22,12 @@ const adminNav = [
   { label: "Manage Units", icon: BookOpen, path: "/admin/units" },
 ];
 
-export default function AppShell({ user, children }) {
+export default function AppShell({ authUser, profile, children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { signOut, profile, getAvatarUrl } = useAuth();
-  const isAdmin = user?.role === "admin";
+  const { signOut, getAvatarUrl } = useAuth();
+  const isAdmin = profile?.role === "admin";
   const nav = isAdmin ? adminNav : studentNav;
 
   const NavItem = ({ item }) => {
@@ -109,7 +109,7 @@ export default function AppShell({ user, children }) {
             {(!collapsed || mobile) && (
               <div className="flex-1 min-w-0">
                 <p className="text-white text-xs font-semibold truncate">{profile?.name}</p>
-                <p className="text-white/40 text-xs truncate">{user?.email}</p>
+                <p className="text-white/40 text-xs truncate">{authUser?.email}</p>
               </div>
             )}
           </Link>
