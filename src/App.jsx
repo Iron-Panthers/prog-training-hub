@@ -16,6 +16,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminAnnouncements from './pages/AdminAnnouncements';
 import AdminUnits from './pages/AdminUnits';
 import { SubmissionsList, SubmissionReview } from './pages/AdminSubmissions';
+import SettingsPage from './pages/Settings';
 
 // Layout
 import AppShell from './components/layout/AppShell';
@@ -132,6 +133,17 @@ const AuthenticatedApp = () => {
               <AdminUnits />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+        }
+      />
+
+      <Route
+        path="/settings"
+        element={
+          user ? (
+            <AppShell user={user}>
+              <SettingsPage />
+            </AppShell>
+          ) : <Navigate to="/" />
         }
       />
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import CosmeticAvatar from "@/components/CosmeticAvatar";
 import redLogo from "@/assets/redLogo.svg";
 import {
   Home, BookOpen, Code2, LayoutDashboard,
@@ -25,7 +26,7 @@ export default function AppShell({ user, children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { signOut } = useAuth();
+  const { signOut, profile, getAvatarUrl } = useAuth();
   const isAdmin = user?.role === "admin";
   const nav = isAdmin ? adminNav : studentNav;
 
@@ -94,17 +95,24 @@ export default function AppShell({ user, children }) {
       {/* User */}
       <div className="px-3 pb-4 border-t border-white/10 pt-4">
         <div className={`flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5 ${collapsed && !mobile ? "justify-center" : ""}`}>
-          <div className="w-8 h-8 rounded-full bg-orange/30 border border-orange/40 flex items-center justify-center flex-shrink-0">
-            <span className="text-sm font-bold text-orange">
-              {user?.name?.charAt(0) || "U"}
-            </span>
-          </div>
-          {(!collapsed || mobile) && (
-            <div className="flex-1 min-w-0">
-              <p className="text-white text-xs font-semibold truncate">{user?.name}</p>
-              <p className="text-white/40 text-xs truncate">{user?.email}</p>
-            </div>
-          )}
+          <Link
+            to="/settings"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center gap-3 flex-1 min-w-0 hover:opacity-80 transition-opacity"
+            title="Settings"
+          >
+            <CosmeticAvatar
+              avatarUrl={getAvatarUrl()}
+              userName={profile?.name || "User"}
+              size="sm"
+            />
+            {(!collapsed || mobile) && (
+              <div className="flex-1 min-w-0">
+                <p className="text-white text-xs font-semibold truncate">{profile?.name}</p>
+                <p className="text-white/40 text-xs truncate">{user?.email}</p>
+              </div>
+            )}
+          </Link>
           <button
             onClick={signOut}
             className="text-white/40 hover:text-orange transition-colors flex-shrink-0"
