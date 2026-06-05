@@ -96,7 +96,7 @@
  * @typedef {Object} Unit
  * @property {string} title
  * @property {string} description
- * @property {"basics"|"oop"|"data-structures"|"algorithms"|"frc-specific"|"advanced"} topic
+ * @property {"java"|"robo"|"frc"} topic
  * @property {number} order
  * @property {boolean} is_published
  * @property {string} slideshow_url

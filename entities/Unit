@@ -12,7 +12,7 @@
       "type": "string",
       "enum": [
         "java",
-        "robocode",
+        "robo",
         "frc"
       ]
     },
