@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Announcement, Unit, StudentProgress } from "@/api/entities";
 import { BookOpen, Code2, TrendingUp, Bell, ChevronRight, Pin, Zap, Trophy, Clock } from "lucide-react";
+import CosmeticAvatar from "../components/CosmeticAvatar";
 
 const topicColors = {
   "basics": "bg-blue-500/20 text-blue-400 border-blue-500/30",
@@ -58,6 +59,10 @@ export default function StudentDashboard({ user }) {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-start justify-between">
             <div className="animate-fade-in">
+              <CosmeticAvatar
+                avatarUrl={user.avatarUrl}
+                userName={user.name}
+              />
               <p className="text-white/50 text-sm font-medium mb-1">Welcome back,</p>
               <h1 className="text-3xl font-black text-white">
                 {user?.name?.split(" ")[0]} <span className="text-orange">🐾</span>
