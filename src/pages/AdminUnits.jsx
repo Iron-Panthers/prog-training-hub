@@ -2,14 +2,13 @@ import { useState, useEffect } from "react";
 import { Unit } from "@/api/entities";
 import { Plus, Pencil, Trash2, Eye, EyeOff, BookOpen, Save, X, ChevronDown, ChevronUp } from "lucide-react";
 
-const TOPICS = ["basics", "oop", "data-structures", "algorithms", "frc-specific", "advanced"];
+const TOPICS = ["java", "robo", "frc"];
 const TOPIC_LABELS = {
-  "basics": "Java Basics", "oop": "OOP", "data-structures": "Data Structures",
-  "algorithms": "Algorithms", "frc-specific": "FRC Specific", "advanced": "Advanced",
+  "java": "Java", "robo": "Robocode", "frc": "FRC"
 };
 
 const Section = ({ id, title, children, expandedSection, setExpandedSection }) => (
-  <div className="bg-card border border-border rounded-xl overflow-hidden">
+<div className="bg-card border border-border rounded-xl overflow-hidden">
     <button
       className="w-full flex items-center justify-between px-5 py-4 text-sm font-bold text-foreground hover:bg-muted transition-colors"
       onClick={() => setExpandedSection(expandedSection === id ? "" : id)}

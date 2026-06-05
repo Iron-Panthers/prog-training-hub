@@ -11,12 +11,9 @@
     "topic": {
       "type": "string",
       "enum": [
-        "basics",
-        "oop",
-        "data-structures",
-        "algorithms",
-        "frc-specific",
-        "advanced"
+        "java",
+        "robocode",
+        "frc"
       ]
     },
     "order": {

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import redLogo from "@/assets/redLogo.svg";
+import whiteLogo from "@/assets/whiteLogo.svg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export default function Login() {
             <h2 className="text-xl font-semibold text-orange mt-1 mb-2">
               Programming Training Hub
             </h2>
-            <div className="inline-block bg-orange/20 border border-orange/30 text-orange px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
+            <div className="inline-block bg-orange/10 border border-orange/40 text-orange px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
               FRC Team 5026
             </div>
           </div>

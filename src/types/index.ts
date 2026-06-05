@@ -86,7 +86,7 @@ export interface ProjectStarter {
 export interface Unit {
   title: string;
   description: string;
-  topic: "basics" | "oop" | "data-structures" | "algorithms" | "frc-specific" | "advanced";
+  topic: "java" | "robo" | "frc";
   order: number;
   is_published: boolean;
   slideshow_url: string;

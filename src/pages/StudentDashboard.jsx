@@ -4,21 +4,15 @@ import { Announcement, Unit, StudentProgress } from "@/api/entities";
 import { BookOpen, Code2, TrendingUp, Bell, ChevronRight, Pin, Zap, Trophy, Clock } from "lucide-react";
 
 const topicColors = {
-  "basics": "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  "oop": "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  "data-structures": "bg-green-500/20 text-green-400 border-green-500/30",
-  "algorithms": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-  "frc-specific": "bg-orange/20 text-orange border-orange/30",
-  "advanced": "bg-red-500/20 text-red-400 border-red-500/30",
+  "java": "bg-red-500/20 text-red-400 border-red-500/30",
+  "robo": "bg-red-500/20 text-red-400 border-red-500/30",
+  "frc": "bg-red-500/20 text-red-400 border-red-500/30"
 };
 
 const topicLabels = {
-  "basics": "Java Basics",
-  "oop": "OOP",
-  "data-structures": "Data Structures",
-  "algorithms": "Algorithms",
-  "frc-specific": "FRC Specific",
-  "advanced": "Advanced",
+  "java": "Java",
+  "robo": "Robocode",
+  "frc": "FRC"
 };
 
 export default function StudentDashboard({ user }) {
