@@ -6,54 +6,54 @@
 
 @layer base {
   :root {
-    --background: 0 0% 10%;
-    --foreground: 0 0% 80%;
-    --card: 0 0% 20%;
-    --card-foreground: 0 0% 90%;
-    --popover: 0 0% 20%;
-    --popover-foreground: 0 0% 90%;
+    --background: 0 0% 6%;
+    --foreground: 0 0% 88%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 92%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 92%;
     --primary: 0 87% 42%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 87% 42%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 55%;
-    --muted-foreground: 0 0% 90%;
+    --muted: 0 0% 45%;
+    --muted-foreground: 0 0% 92%;
     --accent: 0 87% 42%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 87% 42%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
     --ring: 0 87% 42%;
     --radius: 0.75rem;
 
-    --navy: 0 0% 20%;
-    --navy-light: 0 0% 28%;
+    --navy: 0 0% 12%;
+    --navy-light: 0 0% 18%;
     --orange: 0 87% 42%;
     --orange-light: 0 87% 42%;
-    --gold: 0 0% 24%;
+    --gold: 0 0% 16%;
     --red-accent: 0 87% 42%;
   }
 
   .dark {
-    --background: 0 0% 10%;
-    --foreground: 0 0% 80%;
-    --card: 0 0% 20%;
-    --card-foreground: 0 0% 90%;
-    --popover: 0 0% 20%;
-    --popover-foreground: 0 0% 90%;
+    --background: 0 0% 6%;
+    --foreground: 0 0% 88%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 92%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 92%;
     --primary: 0 87% 42%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 87% 42%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 55%;
-    --muted-foreground: 0 0% 90%;
+    --muted: 0 0% 45%;
+    --muted-foreground: 0 0% 92%;
     --accent: 0 87% 42%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 87% 42%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
     --ring: 0 87% 42%;
     --red-accent: 0 87% 42%;
   }

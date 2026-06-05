@@ -25,46 +25,41 @@ export default function Login() {
     <div className="min-h-screen bg-navy flex items-center justify-center relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-orange/10 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-accent/10 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-navy-light/50 blur-3xl" />
-        {/* Grid pattern */}
         <div
           className="absolute inset-0 opacity-5"
           style={{
-            backgroundImage: `linear-gradient(hsl(25 95% 53% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(25 95% 53% / 0.3) 1px, transparent 1px)`,
+            backgroundImage: `background-hsl(25 95% 53% / 0.1)`,
             backgroundSize: "60px 60px",
           }}
         />
       </div>
 
       <div className="relative z-10 w-full max-w-md mx-4 animate-fade-in">
-        {/* Logo / Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-red-accent border border-red-accent/50 mb-6 backdrop-blur-sm shadow-lg shadow-red-accent/30">
-            <img src={redLogo} alt="Logo" className="w-16 h-16" />
-          </div>
-          <div className="inline-block bg-orange/20 border border-orange/30 text-orange px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase mb-3">
-            FRC Team 5026
-          </div>
-          <h1 className="text-3xl font-black text-white leading-tight">
-            Iron Panthers
-          </h1>
-          <h2 className="text-xl font-semibold text-orange mt-1">
-            Programming Training Hub
-          </h2>
-          <p className="text-white/50 text-sm mt-3 font-light">
-            Master Java. Build robots. Dominate the field.
-          </p>
-        </div>
-
         {/* Login Card */}
         <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <h3 className="text-white text-lg font-semibold text-center mb-2">
-            Welcome back, Panther
+          {/* Logo / Header */}
+          <div className="text-center">
+            <div className="flex items-center justify-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl">
+                <img src={redLogo} alt="Logo" className="w-16 h-16" />
+              </div>
+              
+            </div>
+            <h1 className="text-3xl font-black text-white leading-tight">
+              Iron Panthers
+            </h1>
+            <h2 className="text-xl font-semibold text-orange mt-1 mb-2">
+              Programming Training Hub
+            </h2>
+            <div className="inline-block bg-orange/20 border border-orange/30 text-orange px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
+              FRC Team 5026
+            </div>
+          </div>
+          <h3 className="text-white text-lg font-semibold text-center mt-4">
+            Welcome back!
           </h3>
-          <p className="text-white/40 text-sm text-center mb-8">
-            Sign in with your Google account to continue
+          <p className="text-white/40 text-sm text-center mb-4">
+            Sign in with your Google account to continue.
           </p>
 
           <button
@@ -82,14 +77,10 @@ export default function Login() {
 
           <div className="mt-6 pt-6 border-t border-white/10 text-center">
             <p className="text-white/30 text-xs">
-              Only authorized Iron Panthers members can access this platform.
+              what a cool prog training app
             </p>
           </div>
         </div>
-
-        <p className="text-center text-white/20 text-xs mt-6">
-          © 2026 FRC Team 5026 — Iron Panthers Robotics
-        </p>
       </div>
     </div>
   );
