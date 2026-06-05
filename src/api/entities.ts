@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '../lib/supabase';
 import type {
   Announcement as AnnouncementType,
   ProjectSubmission as ProjectSubmissionType,
@@ -9,7 +9,7 @@ import type {
   QuizQuestion,
   ProjectStarter,
   ProjectAdminComments,
-} from '@/types';
+} from '../types';
 
 function parseSortOrder(sortStr?: string | null) {
   if (!sortStr) return null;

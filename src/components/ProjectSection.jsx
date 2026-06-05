@@ -14,9 +14,7 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
     setSubmitting(true);
     await ProjectSubmission.create({
       student_id: user.id,
-      student_name: user.name,
       unit_id: unit.id,
-      unit_title: unit.title,
       code,
       notes,
       status: "submitted",

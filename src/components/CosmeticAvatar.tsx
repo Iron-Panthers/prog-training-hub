@@ -1,9 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { COSMETICS } from "@/config/cosmetics";
-import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { COSMETICS } from "../config/cosmetics";
+import { cn } from "../lib/utils";
 
 interface CosmeticAvatarProps {
   avatarUrl?: string | null;
+  userName?: string;
   initials?: string;
   equippedCosmetics?: Record<string, string>; // slot -> cosmetic id
   /** Size variant — controls the outer wrapper and emoji scale */
@@ -25,7 +26,7 @@ export default function CosmeticAvatar({
   className,
 }: CosmeticAvatarProps) {
   const cfg = sizeConfig[size];
-  const initials = userName
+  const initials = (userName ?? "")
     .split(" ")
     .map((n: string) => n[0])
     .join("")

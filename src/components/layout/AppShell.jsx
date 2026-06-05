@@ -55,7 +55,7 @@ export default function AppShell({ user, children }) {
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-white/10 ${collapsed && !mobile ? "justify-center" : ""}`}>
-        <div className="w-9 h-9 rounded-xl bg-red-accent border border-red-accent/50 flex items-center justify-center flex-shrink-0 shadow-lg shadow-red-accent/20">
+        <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
           <img src={redLogo} alt="Logo" className="w-7 h-7" />
         </div>
         {(!collapsed || mobile) && (
