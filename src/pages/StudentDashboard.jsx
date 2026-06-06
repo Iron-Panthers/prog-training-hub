@@ -56,10 +56,11 @@ export default function StudentDashboard({ user }) {
               <CosmeticAvatar
                 avatarUrl={user.avatarUrl}
                 userName={user.name}
+                className="mb-4"
               />
               <p className="text-white/50 text-sm font-medium mb-1">Welcome back,</p>
               <h1 className="text-3xl font-black text-white">
-                {user?.name?.split(" ")[0]} <span className="text-orange">🐾</span>
+                {user?.name?.split(" ")[0]} <span className="text-orange"></span>
               </h1>
               <p className="text-white/40 text-sm mt-1">Ready to write some Java?</p>
             </div>
