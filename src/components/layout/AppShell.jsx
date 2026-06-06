@@ -39,7 +39,7 @@ export default function AppShell({ authUser, profile, children }) {
         onClick={() => setMobileOpen(false)}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group ${
           active
-            ? "bg-orange text-white shadow-lg shadow-orange/30"
+            ? "bg-primary text-white shadow-lg shadow-primary/30"
             : "text-white/60 hover:text-white hover:bg-white/10"
         }`}
       >
@@ -61,7 +61,7 @@ export default function AppShell({ authUser, profile, children }) {
         {(!collapsed || mobile) && (
           <div>
             <p className="text-white font-black text-sm leading-none">Iron Panthers</p>
-            <p className="text-orange text-xs font-medium mt-0.5">FRC Team 5026</p>
+            <p className="text-primary text-xs font-medium mt-0.5">FRC Team 5026</p>
           </div>
         )}
       </div>
@@ -115,7 +115,7 @@ export default function AppShell({ authUser, profile, children }) {
           </Link>
           <button
             onClick={signOut}
-            className="text-white/40 hover:text-orange transition-colors flex-shrink-0"
+            className="text-white/40 hover:text-primary transition-colors flex-shrink-0"
             title="Logout"
           >
             <LogOut className="w-4 h-4" />

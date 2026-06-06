@@ -23,7 +23,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-navy flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-background flex items-center justify-center relative overflow-hidden">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div
@@ -49,10 +49,10 @@ export default function Login() {
             <h1 className="text-3xl font-black text-white leading-tight">
               Iron Panthers
             </h1>
-            <h2 className="text-xl font-semibold text-orange mt-1 mb-2">
+            <h2 className="text-xl font-semibold text-primary mt-1 mb-2">
               Programming Training Hub
             </h2>
-            <div className="inline-block bg-orange/10 border border-orange/40 text-orange px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
+            <div className="inline-block bg-primary/10 border border-primary/40 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
               FRC Team 5026
             </div>
           </div>

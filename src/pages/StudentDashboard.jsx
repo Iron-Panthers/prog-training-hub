@@ -59,13 +59,13 @@ export default function StudentDashboard({ user }) {
               />
               <p className="text-white/50 text-sm font-medium mb-1">Welcome back,</p>
               <h1 className="text-3xl font-black text-white">
-                {user?.name?.split(" ")[0]} <span className="text-orange">🐾</span>
+                {user?.name?.split(" ")[0]} <span className="text-primary">🐾</span>
               </h1>
               <p className="text-white/40 text-sm mt-1">Ready to write some Java?</p>
             </div>
             <Link
               to="/sandbox"
-              className="hidden md:flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-orange/30"
+              className="hidden md:flex items-center gap-2 bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-primary/30"
             >
               <Code2 className="w-4 h-4" />
               Open Sandbox
@@ -75,7 +75,7 @@ export default function StudentDashboard({ user }) {
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-4 mt-8">
             {[
-              { label: "Overall Progress", value: `${totalProgress}%`, icon: TrendingUp, color: "text-orange" },
+              { label: "Overall Progress", value: `${totalProgress}%`, icon: TrendingUp, color: "text-primary" },
               { label: "Units Completed", value: `${completedUnits}/${units.length}`, icon: Trophy, color: "text-gold" },
               { label: "Active Units", value: `${units.length - completedUnits}`, icon: BookOpen, color: "text-blue-400" },
             ].map((stat) => (
@@ -95,7 +95,7 @@ export default function StudentDashboard({ user }) {
           <section className="animate-fade-in">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                <Bell className="w-5 h-5 text-orange" />
+                <Bell className="w-5 h-5 text-primary" />
                 Updates & Reminders
               </h2>
             </div>
@@ -104,10 +104,10 @@ export default function StudentDashboard({ user }) {
                 <div
                   key={ann.id}
                   className={`bg-card border rounded-xl p-4 flex gap-4 items-start ${
-                    ann.is_pinned ? "border-orange/40 bg-orange/5" : "border-border"
+                    ann.is_pinned ? "border-primary/40 bg-primary/5" : "border-border"
                   }`}
                 >
-                  {ann.is_pinned && <Pin className="w-4 h-4 text-orange flex-shrink-0 mt-0.5" />}
+                  {ann.is_pinned && <Pin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
@@ -136,10 +136,10 @@ export default function StudentDashboard({ user }) {
         <section className="animate-fade-in">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-orange" />
+              <BookOpen className="w-5 h-5 text-primary" />
               Training Units
             </h2>
-            <Link to="/units" className="text-orange text-sm font-medium hover:underline flex items-center gap-1">
+            <Link to="/units" className="text-primary text-sm font-medium hover:underline flex items-center gap-1">
               View all <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
@@ -166,7 +166,7 @@ export default function StudentDashboard({ user }) {
                   <Link
                     key={unit.id}
                     to={`/units/${unit.id}`}
-                    className="bg-card border border-border hover:border-orange/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-orange/10 group block"
+                    className="bg-card border border-border hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-primary/10 group block"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
@@ -178,7 +178,7 @@ export default function StudentDashboard({ user }) {
                         </span>
                       )}
                     </div>
-                    <h3 className="font-bold text-foreground group-hover:text-orange transition-colors mb-1">
+                    <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mb-1">
                       {unit.title}
                     </h3>
                     <p className="text-muted-foreground text-xs line-clamp-2 mb-4">
@@ -191,7 +191,7 @@ export default function StudentDashboard({ user }) {
                       </div>
                       <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-orange to-orange-light rounded-full transition-all duration-500"
+                          className="h-full bg-primary rounded-full transition-all duration-500"
                           style={{ width: `${prog}%` }}
                         />
                       </div>
@@ -206,17 +206,17 @@ export default function StudentDashboard({ user }) {
         {/* Quick actions */}
         <section className="animate-fade-in">
           <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-orange" />
+            <Zap className="w-5 h-5 text-primary" />
             Quick Actions
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <Link to="/sandbox" className="bg-navy hover:bg-navy-light border border-white/10 hover:border-orange/30 rounded-2xl p-5 transition-all group">
-              <Code2 className="w-7 h-7 text-orange mb-3" />
+            <Link to="/sandbox" className="bg-navy hover:bg-navy-light border border-white/10 hover:border-primary/30 rounded-2xl p-5 transition-all group">
+              <Code2 className="w-7 h-7 text-primary mb-3" />
               <p className="text-white font-bold text-sm">Sandbox IDE</p>
               <p className="text-white/40 text-xs mt-1">Write & run Java code</p>
             </Link>
-            <Link to="/units" className="bg-card hover:bg-secondary border border-border hover:border-orange/30 rounded-2xl p-5 transition-all group">
-              <BookOpen className="w-7 h-7 text-orange mb-3" />
+            <Link to="/units" className="bg-card hover:bg-secondary border border-border hover:border-primary/30 rounded-2xl p-5 transition-all group">
+              <BookOpen className="w-7 h-7 text-primary mb-3" />
               <p className="text-foreground font-bold text-sm">All Units</p>
               <p className="text-muted-foreground text-xs mt-1">Browse training material</p>
             </Link>
