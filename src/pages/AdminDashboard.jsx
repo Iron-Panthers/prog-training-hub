@@ -40,7 +40,7 @@ export default function AdminDashboard({ user }) {
       <div className="bg-navy px-6 py-8 md:px-10">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-2">
-            <span className="bg-gold/20 border border-gold/30 text-gold text-xs font-bold px-3 py-1 rounded-full">⚡ ADMIN</span>
+            <span className="bg-gold/20 border border-gold/30 text-gold text-xs font-bold px-3 py-1 rounded-full">ADMIN</span>
           </div>
           <h1 className="text-3xl font-black text-white">
             Admin Dashboard
