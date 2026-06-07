@@ -43,7 +43,7 @@ export default function AdminDashboard({ user }) {
             <span className="bg-gold/20 border border-gold/30 text-gold text-xs font-bold px-3 py-1 rounded-full">⚡ ADMIN</span>
           </div>
           <h1 className="text-3xl font-black text-white">
-            Admin Dashboard <span className="text-orange">🐾</span>
+            Admin Dashboard
           </h1>
           <p className="text-white/40 text-sm mt-1">Iron Panthers Programming Training Hub</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">

@@ -17,6 +17,7 @@ import AdminAnnouncements from './pages/AdminAnnouncements';
 import AdminUnits from './pages/AdminUnits';
 import { SubmissionsList, SubmissionReview } from './pages/AdminSubmissions';
 import SettingsPage from './pages/Settings';
+import ProjectIDEPage from './pages/ProjectIDEPage';
 
 // Layout
 import AppShell from './components/layout/AppShell';
@@ -79,6 +80,16 @@ const AuthenticatedApp = () => {
           user ? (
             <AppShell authUser={user} profile={profile}>
               <SandboxPage />
+            </AppShell>
+          ) : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/project-ide/:unitId"
+        element={
+          user ? (
+            <AppShell authUser={user} profile={profile}>
+              <ProjectIDEPage user={profile} />
             </AppShell>
           ) : <Navigate to="/" />
         }
