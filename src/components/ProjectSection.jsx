@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ProjectSubmission } from "@/api/entities";
 import { Rocket, CheckCircle, Send, List } from "lucide-react";
 import JavaIDE from "@/components/JavaIDE";
 
+const DEFAULT_STARTER = `public class Project {\n    public static void main(String[] args) {\n        // Your project code here\n    }\n}`;
+
 export default function ProjectSection({ unit, user, progress, onSubmit }) {
-  const [code, setCode] = useState(unit.project?.starter_code || `public class Project {\n    public static void main(String[] args) {\n        // Your project code here\n    }\n}`);
+  const currentFilesRef = useRef(null);
   const [notes, setNotes] = useState("");
   const [submitted, setSubmitted] = useState(progress?.project_submitted || false);
   const [submitting, setSubmitting] = useState(false);
+  const [confirmingSubmit, setConfirmingSubmit] = useState(false);
+
+  const storageKey = `project-files-${unit.id}`;
 
   const handleSubmit = async () => {
-    if (!code.trim()) return;
+    const files = currentFilesRef.current || [{ name: "Main.java", code: unit.project?.starter_code || DEFAULT_STARTER }];
+    const mainCode = files[0]?.code || "";
+    if (!mainCode.trim()) return;
+
+    const code = files.length === 1
+      ? files[0].code
+      : files.map(f => `// ===== ${f.name} =====\n${f.code}`).join("\n\n");
+
     setSubmitting(true);
     await ProjectSubmission.create({
       student_id: user.id,
@@ -34,7 +46,7 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
           <CheckCircle className="w-8 h-8 text-green-400" />
         </div>
         <h3 className="text-xl font-black text-foreground mb-2">Project Submitted!</h3>
-        <p className="text-muted-foreground text-sm">Your mentor will review it and leave feedback soon.</p>
+        <p className="text-muted-foreground text-sm">Your teachers will review it and leave feedback soon.</p>
       </div>
     );
   }
@@ -64,13 +76,16 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
       </div>
 
       <JavaIDE
-        initialCode={code}
+        initialCode={unit.project?.starter_code || DEFAULT_STARTER}
         showCompleteButton={false}
         height="380px"
+        storageKey={storageKey}
+        expandUrl={`/project-ide/${unit.id}`}
+        onFilesChange={files => { currentFilesRef.current = files; }}
       />
 
       <div>
-        <label className="text-sm font-semibold text-foreground mb-2 block">Notes for your mentor (optional)</label>
+        <label className="text-sm font-semibold text-foreground mb-2 block">Notes for your teachers (optional)</label>
         <textarea
           value={notes}
           onChange={e => setNotes(e.target.value)}
@@ -79,17 +94,38 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
         />
       </div>
 
-      <button
-        onClick={handleSubmit}
-        disabled={submitting || !code.trim()}
-        className="w-full flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-3.5 rounded-xl transition-all"
-      >
-        {submitting ? (
-          <><div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> Submitting...</>
-        ) : (
-          <><Send className="w-4 h-4" /> Submit Project</>
-        )}
-      </button>
+      {confirmingSubmit ? (
+        <div className="space-y-2">
+          <p className="text-sm text-center text-muted-foreground">Submit your project?</p>
+          <div className="flex gap-3">
+            <button
+              onClick={() => { setConfirmingSubmit(false); handleSubmit(); }}
+              disabled={submitting}
+              className="flex-1 flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-3 rounded-xl transition-all"
+            >
+              {submitting ? (
+                <><div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> Submitting...</>
+              ) : (
+                <><Send className="w-4 h-4" /> Yes, Submit</>
+              )}
+            </button>
+            <button
+              onClick={() => setConfirmingSubmit(false)}
+              className="flex-1 py-3 rounded-xl border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 font-semibold text-sm transition-all"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setConfirmingSubmit(true)}
+          disabled={submitting}
+          className="w-full flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-3.5 rounded-xl transition-all"
+        >
+          <Send className="w-4 h-4" /> Submit Project
+        </button>
+      )}
     </div>
   );
 }

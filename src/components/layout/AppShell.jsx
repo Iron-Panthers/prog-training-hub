@@ -72,7 +72,7 @@ export default function AppShell({ authUser, profile, children }) {
           <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-center ${
             isAdmin ? "bg-gold/20 text-gold border border-gold/30" : "bg-accent/20 text-blue-300 border border-accent/30"
           }`}>
-            {isAdmin ? "⚡ Admin" : "🎓 Student"}
+            {isAdmin ? "Admin" : "Student"}
           </div>
         </div>
       )}
