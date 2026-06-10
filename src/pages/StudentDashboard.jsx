@@ -54,8 +54,8 @@ export default function StudentDashboard({ user }) {
           <div className="flex items-start justify-between">
             <div className="animate-fade-in">
               <CosmeticAvatar
-                avatarUrl={user.avatarUrl}
-                userName={user.name}
+                avatarUrl={user?.avatar_url}
+                userName={user?.name}
                 className="mb-4"
               />
               <p className="text-white/50 text-sm font-medium mb-1">Welcome back,</p>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Announcement, uploadFile } from "@/api/entities";
-import { Plus, Trash2, Pin, Eye, EyeOff, Image, Send, X, Loader2 } from "lucide-react";
+import { Plus, Trash2, Pin, Eye, EyeOff, Image, Send, X, Loader2, Edit2 } from "lucide-react";
 
 const TYPES = ["update", "reminder", "important"];
 
@@ -12,6 +12,7 @@ export default function AdminAnnouncements({ user }) {
   const [imagePreview, setImagePreview] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [editingId, setEditingId] = useState(null);
   const fileRef = useRef();
 
   useEffect(() => {
@@ -40,18 +41,43 @@ export default function AdminAnnouncements({ user }) {
     if (imageFile) {
       imageUrl = await uploadFile(imageFile, 'announcements');
     }
-    const data = await Announcement.create({
-      ...form,
-      image_url: imageUrl,
-      author_id: user.id,
-      is_published: true,
+    try {
+      if (editingId) {
+        await Announcement.update(editingId, {
+          ...form,
+          image_url: imageUrl,
+        });
+      } else {
+        await Announcement.create({
+          ...form,
+          image_url: imageUrl,
+          author_id: user.id,
+          is_published: true,
+        });
+      }
+    } finally {
+      setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" });
+      setImageFile(null);
+      setImagePreview("");
+      setEditingId(null);
+      setShowForm(false);
+      setSubmitting(false);
+      load();
+    }
+  };
+
+  const startEdit = (ann) => {
+    setForm({
+      title: ann.title || "",
+      content: ann.content || "",
+      type: ann.type || "update",
+      is_pinned: !!ann.is_pinned,
+      image_url: ann.image_url || "",
     });
-    setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" });
     setImageFile(null);
-    setImagePreview("");
-    setShowForm(false);
-    setSubmitting(false);
-    load();
+    setImagePreview(ann.image_url || "");
+    setEditingId(ann.id);
+    setShowForm(true);
   };
 
   const togglePin = async (ann) => {
@@ -72,13 +98,13 @@ export default function AdminAnnouncements({ user }) {
   return (
     <div className="min-h-screen bg-background">
       <div className="bg-navy px-6 py-8 md:px-10">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-black text-white">Announcements</h1>
-            <p className="text-white/40 text-sm mt-1">Post updates & reminders for students</p>
+            <p className="text-white/40 text-sm mt-1">Post updates & reminders</p>
           </div>
           <button
-            onClick={() => setShowForm(!showForm)}
+            onClick={() => { setEditingId(null); setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" }); setImageFile(null); setImagePreview(""); setShowForm(!showForm); }}
             className="flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-orange/30"
           >
             <Plus className="w-4 h-4" /> New Post
@@ -90,7 +116,7 @@ export default function AdminAnnouncements({ user }) {
         {/* Form */}
         {showForm && (
           <div className="bg-card border border-orange/30 rounded-2xl p-6 shadow-lg animate-fade-in">
-            <h3 className="font-bold text-foreground mb-4">New Announcement</h3>
+            <h3 className="font-bold text-foreground mb-4">{editingId ? 'Edit Announcement' : 'New Announcement'}</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <input
                 value={form.title}
@@ -156,7 +182,7 @@ export default function AdminAnnouncements({ user }) {
               <div className="flex justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setShowForm(false)}
+                  onClick={() => { setShowForm(false); setEditingId(null); setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" }); setImageFile(null); setImagePreview(""); }}
                   className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground border border-border rounded-xl transition-all"
                 >
                   Cancel
@@ -167,7 +193,7 @@ export default function AdminAnnouncements({ user }) {
                   className="flex items-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-xl transition-all text-sm"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                  {submitting ? "Posting..." : "Post"}
+                  {submitting ? (editingId ? "Updating..." : "Posting...") : (editingId ? "Update" : "Post")}
                 </button>
               </div>
             </form>
@@ -208,6 +234,9 @@ export default function AdminAnnouncements({ user }) {
                     {ann.image_url && <img src={ann.image_url} alt="" className="mt-2 rounded-lg max-h-32 object-cover" />}
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
+                    <button onClick={() => startEdit(ann)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all" title="Edit">
+                      <Edit2 className="w-4 h-4" />
+                    </button>
                     <button onClick={() => togglePin(ann)} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-orange transition-all" title="Toggle pin">
                       <Pin className="w-4 h-4" />
                     </button>

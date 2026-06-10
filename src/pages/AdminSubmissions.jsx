@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ProjectSubmission, QuizSubmission } from "@/api/entities";
+import { ProjectSubmission, QuizSubmission, Unit } from "@/api/entities";
+import { getProfile } from "@/lib/profiles";
 import { ArrowLeft, MessageSquare, CheckCircle, AlertCircle, Clock, Send, Loader2, Filter } from "lucide-react";
 import { formatDateValue } from "@/utils";
 
@@ -12,14 +13,36 @@ function SubmissionsList({ user }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      ProjectSubmission.list("-created_at", 50),
-      QuizSubmission.list("-created_at", 50),
-    ]).then(([s, q]) => {
-      setSubmissions(s);
-      setQuizzes(q);
+    (async () => {
+      const [s, q] = await Promise.all([
+        ProjectSubmission.list("-created_at", 50),
+        QuizSubmission.list("-created_at", 50),
+      ]);
+
+      const subs = await Promise.all(s.map(async (sub) => {
+        const profile = sub.student_id ? await getProfile(sub.student_id) : null;
+        let unitTitle = sub.unit_title;
+        if (!unitTitle && sub.unit_id) {
+          const u = await Unit.filter({ id: sub.unit_id });
+          unitTitle = u?.[0]?.title || "";
+        }
+        return { ...sub, student_name: profile?.name || sub.student_id, unit_title: unitTitle };
+      }));
+
+      const quizzes = await Promise.all(q.map(async (qq) => {
+        const profile = qq.student_id ? await getProfile(qq.student_id) : null;
+        let unitTitle = qq.unit_title;
+        if (!unitTitle && qq.unit_id) {
+          const u = await Unit.filter({ id: qq.unit_id });
+          unitTitle = u?.[0]?.title || "";
+        }
+        return { ...qq, student_name: profile?.name || qq.student_id, unit_title: unitTitle };
+      }));
+
+      setSubmissions(subs);
+      setQuizzes(quizzes);
       setLoading(false);
-    });
+    })();
   }, []);
 
   const statusIcon = (s) => {
@@ -189,7 +212,7 @@ function SubmissionReview({ user }) {
           </Link>
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-xl font-black text-white">{sub.student_name}'s Submission</h1>
+              <h1 className="text-xl font-black text-white">{sub.student_id}'s Submission</h1>
               <p className="text-white/40 text-sm mt-0.5">{sub.unit_title}</p>
             </div>
             <div className="flex gap-2 flex-wrap justify-end">
