@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ProjectSubmission, QuizSubmission, Unit } from "@/api/entities";
 import { getProfile } from "@/lib/profiles";
-import { ArrowLeft, MessageSquare, CheckCircle, AlertCircle, Clock, Send, Loader2, Filter } from "lucide-react";
+import JavaIDE from "@/components/JavaIDE";
+import { ArrowLeft, MessageSquare, CheckCircle, AlertCircle, Clock, Send, Loader2 } from "lucide-react";
 import { formatDateValue } from "@/utils";
 
 function SubmissionsList({ user }) {
@@ -201,8 +202,6 @@ function SubmissionReview({ user }) {
   if (loading) return <div className="min-h-screen bg-background flex items-center justify-center"><div className="w-8 h-8 border-4 border-muted border-t-orange rounded-full animate-spin" /></div>;
   if (!sub) return <div className="min-h-screen bg-background flex items-center justify-center"><p className="text-muted-foreground">Submission not found.</p></div>;
 
-  const codeLines = sub.code?.split("\n") || [];
-
   return (
     <div className="min-h-screen bg-background">
       <div className="bg-navy px-6 py-6 md:px-10">
@@ -234,38 +233,14 @@ function SubmissionReview({ user }) {
 
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Code view */}
           <div className="lg:col-span-2">
-            <div className="bg-[#1e1e2e] rounded-2xl overflow-hidden border border-white/10">
-              <div className="px-4 py-3 bg-[#181825] border-b border-white/10 flex items-center gap-3">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/60" />
-                </div>
-                <span className="text-white/40 text-xs font-mono">Submission.java</span>
-              </div>
-              <div className="overflow-auto max-h-[500px]">
-                <table className="w-full">
-                  <tbody>
-                    {codeLines.map((line, i) => {
-                      const hasComment = sub.admin_comments?.some(c => c.line_number === i + 1);
-                      return (
-                        <tr key={i} className={`group ${hasComment ? "bg-orange/10" : "hover:bg-white/5"}`}>
-                          <td className="px-4 py-0.5 text-white/20 text-xs font-mono text-right select-none w-10 border-r border-white/10">
-                            {i + 1}
-                          </td>
-                          <td className="px-4 py-0.5 text-[#cdd6f4] text-xs font-mono whitespace-pre">
-                            {line || " "}
-                          </td>
-                          {hasComment && <td className="px-2"><MessageSquare className="w-3 h-3 text-orange" /></td>}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <JavaIDE
+              key={sub.id}
+              initialCode={sub.code || ""}
+              showCompleteButton={false}
+              height="520px"
+              storageKey={null}
+            />
             {sub.notes && (
               <div className="mt-4 bg-card border border-border rounded-xl p-4">
                 <p className="text-xs font-semibold text-muted-foreground mb-1">Student's Notes</p>

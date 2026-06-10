@@ -54,7 +54,7 @@ export default function UnitsPage({ user }) {
           <h1 className="text-2xl font-black text-white mb-1 flex items-center gap-2">
             <BookOpen className="w-6 h-6 text-orange" /> Training Units
           </h1>
-          <p className="text-white/40 text-sm">Your complete Java programming curriculum</p>
+          <p className="text-white/40 text-sm">Reference slideshows, quizzes, and projects</p>
           <div className="relative mt-5">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
             <input

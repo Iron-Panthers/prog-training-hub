@@ -30,7 +30,7 @@ export default function AppShell({ authUser, profile, children }) {
   const isAdmin = profile?.role === "admin";
   const nav = isAdmin ? adminNav : studentNav;
 
-  const NavItem = ({ item }) => {
+  const NavItem = ({ item, mobile = false }) => {
     const active = location.pathname === item.path ||
       (item.path !== "/dashboard" && item.path !== "/admin" && location.pathname.startsWith(item.path));
     return (
@@ -41,10 +41,10 @@ export default function AppShell({ authUser, profile, children }) {
           active
             ? "bg-primary text-white shadow-lg shadow-primary/30"
             : "text-white/60 hover:text-white hover:bg-white/10"
-        }`}
+        } ${collapsed && !mobile ? "justify-center" : ""}`}
       >
         <item.icon className={`w-5 h-5 flex-shrink-0 ${active ? "text-white" : "text-white/60 group-hover:text-white"}`} />
-        {(!collapsed || mobileOpen) && (
+        {(!collapsed || mobile) && (
           <span className="text-sm font-medium truncate">{item.label}</span>
         )}
       </Link>
@@ -52,7 +52,7 @@ export default function AppShell({ authUser, profile, children }) {
   };
 
   const SidebarContent = ({ mobile = false }) => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full min-h-0">
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-white/10 ${collapsed && !mobile ? "justify-center" : ""}`}>
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -78,8 +78,8 @@ export default function AppShell({ authUser, profile, children }) {
       )}
 
       {/* Nav */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {nav.map((item) => <NavItem key={item.path} item={item} />)}
+      <nav className="flex-1 min-h-0 px-3 py-4 space-y-1 overflow-y-auto no-scrollbar">
+        {nav.map((item) => <NavItem key={item.path} item={item} mobile={mobile} />)}
         {isAdmin && (
           <>
             <div className="pt-2 pb-1">
@@ -87,18 +87,18 @@ export default function AppShell({ authUser, profile, children }) {
                 {(!collapsed || mobile) ? "Student View" : "·"}
               </div>
             </div>
-            {studentNav.map((item) => <NavItem key={`s-${item.path}`} item={item} />)}
+            {studentNav.map((item) => <NavItem key={`s-${item.path}`} item={item} mobile={mobile} />)}
           </>
         )}
       </nav>
 
       {/* User */}
       <div className="px-3 pb-4 border-t border-white/10 pt-4">
-        <div className={`flex items-center gap-3 px-3 py-2 rounded-xl bg-white/5 ${collapsed && !mobile ? "justify-center" : ""}`}>
+        <div className={`flex items-center px-3 py-2 rounded-xl bg-white/5 ${collapsed && !mobile ? "justify-center" : ""}`}>
           <Link
             to="/settings"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-3 flex-1 min-w-0 hover:opacity-80 transition-opacity"
+            className={`flex items-center ${collapsed && !mobile ? "justify-center" : "gap-3 flex-1 min-w-0"} hover:opacity-80 transition-opacity`}
             title="Settings"
           >
             <CosmeticAvatar
@@ -113,13 +113,15 @@ export default function AppShell({ authUser, profile, children }) {
               </div>
             )}
           </Link>
-          <button
-            onClick={signOut}
-            className="text-white/40 hover:text-primary transition-colors flex-shrink-0"
-            title="Logout"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
+          {(!collapsed || mobile) && (
+            <button
+              onClick={signOut}
+              className="text-white/40 hover:text-primary transition-colors flex-shrink-0"
+              title="Logout"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -129,7 +131,7 @@ export default function AppShell({ authUser, profile, children }) {
     <div className="flex h-screen bg-background overflow-hidden">
       {/* Desktop Sidebar */}
       <aside
-        className={`hidden md:flex flex-col bg-navy border-r border-white/10 transition-all duration-300 flex-shrink-0 ${
+        className={`hidden md:flex flex-col bg-navy border-r border-white/10 transition-all duration-300 flex-shrink-0 overflow-hidden ${
           collapsed ? "w-16" : "w-60"
         }`}
       >

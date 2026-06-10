@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Unit, Announcement, ProjectSubmission, QuizSubmission } from "@/api/entities";
+import { getProfile } from "@/lib/profiles";
 import { BookOpen, Megaphone, ClipboardList, TrendingUp, AlertCircle, CheckCircle, Clock } from "lucide-react";
 import { formatDateValue } from "@/utils";
 
@@ -10,16 +11,25 @@ export default function AdminDashboard({ user }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      Unit.list(),
-      Announcement.list(),
-      ProjectSubmission.list("-created_at", 5),
-      QuizSubmission.list("-created_at", 5),
-    ]).then(([units, ann, subs, quizzes]) => {
+    const loadDashboard = async () => {
+      const [units, ann, subs, quizzes] = await Promise.all([
+        Unit.list(),
+        Announcement.list(),
+        ProjectSubmission.list("-created_at", 5),
+        QuizSubmission.list("-created_at", 5),
+      ]);
+
+      const recentWithNames = await Promise.all(subs.map(async (sub) => {
+        const profile = sub.student_id ? await getProfile(sub.student_id) : null;
+        return { ...sub, student_name: profile?.name || sub.student_id };
+      }));
+
       setStats({ units: units.length, announcements: ann.length, submissions: subs.length, quizzes: quizzes.length });
-      setRecentSubmissions(subs);
+      setRecentSubmissions(recentWithNames);
       setLoading(false);
-    });
+    };
+
+    loadDashboard();
   }, []);
 
   const statCards = [
@@ -34,6 +44,8 @@ export default function AdminDashboard({ user }) {
     if (status === "needs_revision") return <AlertCircle className="w-4 h-4 text-red-400" />;
     return <Clock className="w-4 h-4 text-yellow-400" />;
   };
+
+  const formatStatus = (status) => status?.replace(/(^|_)([a-z])/g, (_, sep, char) => `${sep === '_' ? ' ' : ''}${char.toUpperCase()}`);
 
   return (
     <div className="min-h-screen bg-background">
@@ -128,7 +140,7 @@ export default function AdminDashboard({ user }) {
                     sub.status === "needs_revision" ? "bg-red-500/10 text-red-400 border-red-500/20" :
                     "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
                   }`}>
-                    {sub.status}
+                    {formatStatus(sub.status)}
                   </span>
                 </Link>
               ))}

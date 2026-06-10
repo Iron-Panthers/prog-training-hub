@@ -99,7 +99,7 @@ export default function SandboxPage() {
           <Code2 className="w-5 h-5 text-orange" />
           <div>
             <h1 className="text-white font-black text-sm">Java Sandbox IDE</h1>
-            <p className="text-white/30 text-xs">Iron Panthers — FRC Team 5026</p>
+            <p className="text-white/30 text-xs">Write and test your code</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
