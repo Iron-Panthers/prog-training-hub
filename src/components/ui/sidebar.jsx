@@ -286,6 +286,7 @@ SidebarInset.displayName = "SidebarInset"
 
 const SidebarInput = React.forwardRef(({ className, ...props }, ref) => {
   return (
+    
     (<Input
       ref={ref}
       data-sidebar="input"

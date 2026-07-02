@@ -101,6 +101,7 @@
  * @property {boolean} is_published
  * @property {string} slideshow_url
  * @property {string} slideshow_embed
+ * @property {string} slideshow_pdf
  * @property {Exercise[]} exercises
  * @property {QuizQuestion[]} quiz_questions
  * @property {ProjectStarter} project

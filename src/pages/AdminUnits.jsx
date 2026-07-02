@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Unit } from "@/api/entities";
-import { Plus, Pencil, Trash2, Eye, EyeOff, BookOpen, Save, X, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Unit, uploadFile } from "@/api/entities";
+import { Plus, Pencil, Trash2, Eye, EyeOff, BookOpen, Save, X, ChevronDown, ChevronUp, Upload, FileText, Loader2 } from "lucide-react";
 
 const TOPICS = ["java", "robo", "frc"];
 const TOPIC_LABELS = {
@@ -22,7 +22,7 @@ const Section = ({ id, title, children, expandedSection, setExpandedSection }) =
 
 const emptyUnit = {
   title: "", description: "", topic: "basics", order: 1, is_published: false,
-  slideshow_embed: "", slideshow_url: "", exercises: [], quiz_questions: [],
+  slideshow_pdf: "", slideshow_embed: "", slideshow_url: "", exercises: [], quiz_questions: [],
   project: { title: "", description: "", requirements: [], starter_code: "" }
 };
 
@@ -33,6 +33,9 @@ export default function AdminUnits() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [expandedSection, setExpandedSection] = useState("basic");
+  const [pdfFile, setPdfFile] = useState(null);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const pdfRef = useRef();
 
   useEffect(() => { load(); }, []);
 
@@ -45,6 +48,7 @@ export default function AdminUnits() {
   const startEdit = (unit) => {
     setEditing(unit.id);
     setForm({ ...emptyUnit, ...unit });
+    setPdfFile(null);
     setExpandedSection("basic");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -52,18 +56,31 @@ export default function AdminUnits() {
   const startNew = () => {
     setEditing("new");
     setForm({ ...emptyUnit, order: units.length + 1 });
+    setPdfFile(null);
     setExpandedSection("basic");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const save = async () => {
     setSaving(true);
+    let data = form;
+    if (pdfFile) {
+      setUploadingPdf(true);
+      try {
+        const url = await uploadFile(pdfFile, 'slideshows');
+        data = { ...form, slideshow_pdf: url };
+        setForm(data);
+      } finally {
+        setUploadingPdf(false);
+      }
+    }
     if (editing === "new") {
-      await Unit.create(form);
+      await Unit.create(data);
     } else {
-      await Unit.update(editing, form);
+      await Unit.update(editing, data);
     }
     setEditing(null);
+    setPdfFile(null);
     setSaving(false);
     load();
   };
@@ -172,7 +189,39 @@ export default function AdminUnits() {
 
             <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="slideshow" title="📊 Slideshow">
               <div>
-                <label className={labelClass}>Embed URL (Google Slides, etc.)</label>
+                <label className={labelClass}>PDF Slideshow (embedded automatically)</label>
+                <input
+                  ref={pdfRef}
+                  type="file"
+                  accept="application/pdf"
+                  className="hidden"
+                  onChange={e => setPdfFile(e.target.files?.[0] || null)}
+                />
+                <div className="flex items-center gap-3 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => pdfRef.current?.click()}
+                    className="flex items-center gap-2 bg-background border border-border hover:border-orange/50 text-foreground text-sm font-semibold px-4 py-2.5 rounded-xl transition-all"
+                  >
+                    <Upload className="w-4 h-4" /> {form.slideshow_pdf || pdfFile ? "Replace PDF" : "Upload PDF"}
+                  </button>
+                  {pdfFile ? (
+                    <span className="flex items-center gap-2 text-sm text-foreground">
+                      <FileText className="w-4 h-4 text-orange" /> {pdfFile.name}
+                      <button type="button" onClick={() => { setPdfFile(null); if (pdfRef.current) pdfRef.current.value = ""; }} className="text-muted-foreground hover:text-red-400"><X className="w-4 h-4" /></button>
+                    </span>
+                  ) : form.slideshow_pdf ? (
+                    <span className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <FileText className="w-4 h-4 text-orange" />
+                      <a href={form.slideshow_pdf} target="_blank" rel="noopener noreferrer" className="hover:text-orange underline">Current PDF</a>
+                      <button type="button" onClick={() => setForm({ ...form, slideshow_pdf: "" })} className="text-muted-foreground hover:text-red-400"><X className="w-4 h-4" /></button>
+                    </span>
+                  ) : null}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1.5">Upload a PDF and it embeds directly on the unit page — no click-through needed. Students can present it fullscreen with a Java IDE alongside.</p>
+              </div>
+              <div>
+                <label className={labelClass}>Or Embed URL (Google Slides, etc.)</label>
                 <input value={form.slideshow_embed || ""} onChange={e => setForm({ ...form, slideshow_embed: e.target.value })} className={inputClass} placeholder="https://docs.google.com/presentation/d/..." />
               </div>
               <div>
@@ -252,8 +301,8 @@ export default function AdminUnits() {
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => setEditing(null)} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground border border-border rounded-xl transition-all">Cancel</button>
               <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-xl transition-all text-sm">
-                {saving ? <div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> : <Save className="w-4 h-4" />}
-                {saving ? "Saving..." : "Save Unit"}
+                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                {uploadingPdf ? "Uploading PDF..." : saving ? "Saving..." : "Save Unit"}
               </button>
             </div>
           </div>

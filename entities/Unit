@@ -29,6 +29,9 @@
     "slideshow_embed": {
       "type": "string"
     },
+    "slideshow_pdf": {
+      "type": "string"
+    },
     "exercises": {
       "type": "array",
       "items": {

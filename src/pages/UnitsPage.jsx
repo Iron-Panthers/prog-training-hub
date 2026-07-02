@@ -104,7 +104,7 @@ export default function UnitsPage({ user }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filtered.map((unit, i) => {
               const prog = getProgress(unit.id);
-              const hasSlideshow = !!unit.slideshow_embed || !!unit.slideshow_url;
+              const hasSlideshow = !!unit.slideshow_pdf || !!unit.slideshow_embed || !!unit.slideshow_url;
               const hasQuiz = unit.quiz_questions?.length > 0;
               const hasProject = !!unit.project?.title;
               const exerciseCount = unit.exercises?.length || 0;

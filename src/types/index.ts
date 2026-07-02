@@ -91,6 +91,7 @@ export interface Unit {
   is_published: boolean;
   slideshow_url: string;
   slideshow_embed: string;
+  slideshow_pdf: string;
   exercises: Exercise[];
   quiz_questions: QuizQuestion[]
   project: ProjectStarter;

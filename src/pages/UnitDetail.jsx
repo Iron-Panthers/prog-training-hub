@@ -5,6 +5,7 @@ import { ArrowLeft, BookOpen, Code2, HelpCircle, Rocket, CheckCircle } from "luc
 import JavaIDE from "@/components/JavaIDE";
 import QuizSection from "@/components/QuizSection";
 import ProjectSection from "@/components/ProjectSection";
+import SlideshowViewer from "@/components/SlideshowViewer";
 
 const TABS = [
   { key: "slideshow", label: "Slideshow", icon: BookOpen },
@@ -58,7 +59,7 @@ export default function UnitDetail({ user }) {
     if (!unit) return;
     let score = 0;
     let total = 0;
-    if (unit.slideshow_embed || unit.slideshow_url) { total++; if (p.slideshow_completed) score++; }
+    if (unit.slideshow_pdf || unit.slideshow_embed || unit.slideshow_url) { total++; if (p.slideshow_completed) score++; }
     const exCount = unit.exercises?.length || 0;
     if (exCount > 0) { total++; if ((p.exercises_completed?.length || 0) >= exCount) score++; }
     if (unit.quiz_questions?.length > 0) { total++; if (p.quiz_completed) score++; }
@@ -89,7 +90,7 @@ export default function UnitDetail({ user }) {
   const overallProg = progress?.overall_progress || 0;
 
   const availableTabs = TABS.filter(t => {
-    if (t.key === "slideshow") return unit.slideshow_embed || unit.slideshow_url;
+    if (t.key === "slideshow") return unit.slideshow_pdf || unit.slideshow_embed || unit.slideshow_url;
     if (t.key === "exercises") return unit.exercises?.length > 0;
     if (t.key === "quiz") return unit.quiz_questions?.length > 0;
     if (t.key === "project") return unit.project?.title;
@@ -152,46 +153,11 @@ export default function UnitDetail({ user }) {
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-8">
         {activeTab === "slideshow" && (
           <div className="animate-fade-in">
-            {unit.slideshow_embed ? (
-              <>
-                <div className="bg-card border border-border rounded-2xl overflow-hidden aspect-video">
-                  <iframe
-                    src={unit.slideshow_embed}
-                    className="w-full h-full"
-                    title="Slideshow"
-                    allowFullScreen
-                  />
-                </div>
-                {!progress?.slideshow_completed && (
-                  <button
-                    onClick={markSlideshowComplete}
-                    className="mt-4 flex items-center gap-2 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-green-400 font-semibold px-5 py-2.5 rounded-xl transition-all"
-                  >
-                    <CheckCircle className="w-4 h-4" /> Mark as Completed
-                  </button>
-                )}
-                {progress?.slideshow_completed && (
-                  <div className="mt-4 flex items-center gap-2 text-green-400 text-sm font-semibold">
-                    <CheckCircle className="w-4 h-4" /> Slideshow completed!
-                  </div>
-                )}
-              </>
-            ) : unit.slideshow_url ? (
-              <div className="bg-card border border-border rounded-2xl p-8 text-center">
-                <BookOpen className="w-10 h-10 text-orange mx-auto mb-3" />
-                <p className="text-foreground font-semibold mb-2">External Slideshow</p>
-                <a
-                  href={unit.slideshow_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-orange hover:underline text-sm"
-                >
-                  Open Slideshow →
-                </a>
-              </div>
-            ) : (
-              <div className="text-center py-16 text-muted-foreground">No slideshow available for this unit.</div>
-            )}
+            <SlideshowViewer
+              unit={unit}
+              completed={progress?.slideshow_completed}
+              onComplete={markSlideshowComplete}
+            />
           </div>
         )}
 
