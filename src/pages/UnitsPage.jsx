@@ -115,10 +115,10 @@ export default function UnitsPage({ user }) {
                   className="bg-card border border-border hover:border-orange/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-orange/10 group block animate-fade-in"
                   style={{ animationDelay: `${i * 50}ms` }}
                 >
-                  <div className="flex items-start justify-between mb-3">
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
+                  <div className="flex items-start justify-between">
+                    {/* <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
                       {topicLabels[unit.topic] || unit.topic}
-                    </span>
+                    </span> */}
                     {prog === 100 && (
                       <span className="text-xs text-green-400 font-semibold flex items-center gap-1">
                         <Trophy className="w-3 h-3" /> Complete
@@ -134,10 +134,10 @@ export default function UnitsPage({ user }) {
 
                   {/* Content tags */}
                   <div className="flex flex-wrap gap-1.5 mb-4">
-                    {hasSlideshow && <span className="text-xs px-2 py-0.5 bg-blue-500/10 text-blue-400 rounded-md border border-blue-500/20">📊 Slideshow</span>}
-                    {exerciseCount > 0 && <span className="text-xs px-2 py-0.5 bg-green-500/10 text-green-400 rounded-md border border-green-500/20">💻 {exerciseCount} Exercise{exerciseCount > 1 ? "s" : ""}</span>}
-                    {hasQuiz && <span className="text-xs px-2 py-0.5 bg-purple-500/10 text-purple-400 rounded-md border border-purple-500/20">📝 Quiz</span>}
-                    {hasProject && <span className="text-xs px-2 py-0.5 bg-orange/10 text-orange rounded-md border border-orange/20">🚀 Project</span>}
+                    {hasSlideshow && <span className="text-xs px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20">Slideshow</span>}
+                    {exerciseCount > 0 && <span className="text-xs px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20">{exerciseCount} Exercise{exerciseCount > 1 ? "s" : ""}</span>}
+                    {hasQuiz && <span className="text-xs px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20">Quiz</span>}
+                    {hasProject && <span className="text-xs px-2 py-0.5 bg-orange/10 text-orange rounded-md border border-orange/20">Project</span>}
                   </div>
 
                   <div>

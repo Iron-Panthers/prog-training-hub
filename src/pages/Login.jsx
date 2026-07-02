@@ -52,13 +52,7 @@ export default function Login() {
             <h2 className="text-xl font-semibold text-primary mt-1 mb-2">
               Programming Training Hub
             </h2>
-            <div className="inline-block bg-primary/10 border border-primary/40 text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase">
-              FRC Team 5026
-            </div>
           </div>
-          <h3 className="text-white text-lg font-semibold text-center mt-4">
-            Welcome back!
-          </h3>
           <p className="text-white/40 text-sm text-center mb-4">
             Sign in with your Google account to continue.
           </p>

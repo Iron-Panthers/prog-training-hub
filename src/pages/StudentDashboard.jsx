@@ -66,7 +66,7 @@ export default function StudentDashboard({ user }) {
             </div>
             <Link
               to="/sandbox"
-              className="hidden md:flex items-center gap-2 bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105 shadow-lg shadow-primary/30"
+              className="hidden md:flex items-center gap-2 bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105"
             >
               <Code2 className="w-4 h-4" />
               Open Sandbox
@@ -167,7 +167,7 @@ export default function StudentDashboard({ user }) {
                   <Link
                     key={unit.id}
                     to={`/units/${unit.id}`}
-                    className="bg-card border border-border hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-primary/10 group block"
+                    className="bg-card border border-border hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 group block"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
@@ -221,11 +221,11 @@ export default function StudentDashboard({ user }) {
               <p className="text-foreground font-bold text-sm">All Units</p>
               <p className="text-muted-foreground text-xs mt-1">Browse training material</p>
             </Link>
-            <div className="bg-card border border-border rounded-2xl p-5">
+            {/* <div className="bg-card border border-border rounded-2xl p-5">
               <Clock className="w-7 h-7 text-muted-foreground mb-3" />
               <p className="text-foreground font-bold text-sm">Coming Soon</p>
               <p className="text-muted-foreground text-xs mt-1">More features on the way</p>
-            </div>
+            </div> */}
           </div>
         </section>
       </div>
