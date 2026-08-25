@@ -106,7 +106,7 @@ export default function UnitsPage({ user }) {
               const prog = getProgress(unit.id);
               const hasSlideshow = !!unit.slideshow_pdf || !!unit.slideshow_embed || !!unit.slideshow_url;
               const hasQuiz = unit.quiz_questions?.length > 0;
-              const hasProject = !!unit.project?.title;
+              const projectCount = unit.projects?.length || 0;
               const exerciseCount = unit.exercises?.length || 0;
               return (
                 <Link
@@ -137,7 +137,7 @@ export default function UnitsPage({ user }) {
                     {hasSlideshow && <span className="text-xs px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20">Slideshow</span>}
                     {exerciseCount > 0 && <span className="text-xs px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20">{exerciseCount} Exercise{exerciseCount > 1 ? "s" : ""}</span>}
                     {hasQuiz && <span className="text-xs px-2 py-0.5 bg-orange-500/10 text-orange-400 rounded-md border border-orange-500/20">Quiz</span>}
-                    {hasProject && <span className="text-xs px-2 py-0.5 bg-orange/10 text-orange rounded-md border border-orange/20">Project</span>}
+                    {projectCount > 0 && <span className="text-xs px-2 py-0.5 bg-orange/10 text-orange rounded-md border border-orange/20">{projectCount} Project{projectCount > 1 ? "s" : ""}</span>}
                   </div>
 
                   <div>

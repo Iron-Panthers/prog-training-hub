@@ -26,9 +26,16 @@
       "type": "boolean",
       "default": false
     },
+    "projects_submitted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "project_submitted": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "description": "Deprecated: superseded by `projects_submitted`. Kept for rollback only."
     },
     "overall_progress": {
       "type": "number",

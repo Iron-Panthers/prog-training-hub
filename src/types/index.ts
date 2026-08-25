@@ -32,6 +32,7 @@ export interface ProjectSubmission {
   id: string;
   student_id: string;
   unit_id: string;
+  project_id: string;
   code: string;
   notes: string;
   status: "submitted" | "reviewed" | "approved" | "needs_revision";
@@ -49,13 +50,14 @@ export interface QuizSubmission {
 }
 
 export interface StudentProgress {
+  id: string;
   student_id: string;
   unit_id: string;
   slideshow_completed: boolean;
   exercises_completed: string[];
   quiz_attempts: number;
   quiz_completed: number;
-  project_submitted: boolean;
+  projects_submitted: string[];
   overall_progress: number;
 }
 
@@ -77,6 +79,7 @@ export interface QuizQuestion { // should be updated to handle frq?
 }
 
 export interface ProjectStarter {
+  id: string;
   title: string;
   description: string;
   requirements: string[];
@@ -94,5 +97,5 @@ export interface Unit {
   slideshow_pdf: string;
   exercises: Exercise[];
   quiz_questions: QuizQuestion[]
-  project: ProjectStarter;
+  projects: ProjectStarter[];
 }

@@ -1,21 +1,23 @@
 import { useRef, useState } from "react";
 import { ProjectSubmission } from "@/api/entities";
+import { resolveProjectStorageKey } from "@/lib/projectFiles";
 import { Rocket, CheckCircle, Send, List } from "lucide-react";
 import JavaIDE from "@/components/JavaIDE";
 
 const DEFAULT_STARTER = `public class Project {\n    public static void main(String[] args) {\n        // Your project code here\n    }\n}`;
 
-export default function ProjectSection({ unit, user, progress, onSubmit }) {
+export default function ProjectSection({ unit, project, user, progress, onSubmit }) {
   const currentFilesRef = useRef(null);
   const [notes, setNotes] = useState("");
-  const [submitted, setSubmitted] = useState(progress?.project_submitted || false);
+  const [justSubmitted, setJustSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [confirmingSubmit, setConfirmingSubmit] = useState(false);
 
-  const storageKey = `project-files-${unit.id}`;
+  const [storageKey] = useState(() => resolveProjectStorageKey(unit.id, project.id));
+  const submitted = justSubmitted || progress?.projects_submitted?.includes(project.id) || false;
 
   const handleSubmit = async () => {
-    const files = currentFilesRef.current || [{ name: "Main.java", code: unit.project?.starter_code || DEFAULT_STARTER }];
+    const files = currentFilesRef.current || [{ name: "Main.java", code: project.starter_code || DEFAULT_STARTER }];
     const mainCode = files[0]?.code || "";
     if (!mainCode.trim()) return;
 
@@ -27,12 +29,13 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
     await ProjectSubmission.create({
       student_id: user.id,
       unit_id: unit.id,
+      project_id: project.id,
       code,
       notes,
       status: "submitted",
       created_at: new Date().toISOString(),
     });
-    setSubmitted(true);
+    setJustSubmitted(true);
     onSubmit?.();
     setSubmitting(false);
   };
@@ -53,16 +56,16 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
     <div className="animate-fade-in space-y-6">
       <div className="bg-card border border-border rounded-2xl p-6">
         <h3 className="font-bold text-foreground text-lg mb-1 flex items-center gap-2">
-          <Rocket className="w-5 h-5 text-orange" /> {unit.project.title}
+          <Rocket className="w-5 h-5 text-orange" /> {project.title}
         </h3>
-        <p className="text-muted-foreground text-sm mb-4">{unit.project.description}</p>
-        {unit.project.requirements?.length > 0 && (
+        <p className="text-muted-foreground text-sm mb-4">{project.description}</p>
+        {project.requirements?.length > 0 && (
           <div>
             <p className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
               <List className="w-3.5 h-3.5" /> Requirements
             </p>
             <ul className="space-y-1">
-              {unit.project.requirements.map((req, i) => (
+              {project.requirements.map((req, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                   <span className="w-1.5 h-1.5 rounded-full bg-orange flex-shrink-0 mt-1.5" />
                   {req}
@@ -74,11 +77,11 @@ export default function ProjectSection({ unit, user, progress, onSubmit }) {
       </div>
 
       <JavaIDE
-        initialCode={unit.project?.starter_code || DEFAULT_STARTER}
+        initialCode={project.starter_code || DEFAULT_STARTER}
         showCompleteButton={false}
         height="380px"
         storageKey={storageKey}
-        expandUrl={`/project-ide/${unit.id}`}
+        expandUrl={`/project-ide/${unit.id}/${project.id}`}
         onFilesChange={files => { currentFilesRef.current = files; }}
       />
 

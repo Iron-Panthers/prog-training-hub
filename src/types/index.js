@@ -36,6 +36,7 @@
  * @property {string} id
  * @property {string} student_id
  * @property {string} unit_id
+ * @property {string} project_id
  * @property {string} code
  * @property {string} notes
  * @property {"submitted"|"reviewed"|"approved"|"needs_revision"} status
@@ -55,13 +56,14 @@
 
 /**
  * @typedef {Object} StudentProgress
+ * @property {string} id
  * @property {string} student_id
  * @property {string} unit_id
  * @property {boolean} slideshow_completed
  * @property {string[]} exercises_completed
  * @property {number} quiz_attempts
  * @property {number} quiz_completed
- * @property {boolean} project_submitted
+ * @property {string[]} projects_submitted
  * @property {number} overall_progress
  */
 
@@ -86,6 +88,7 @@
 
 /**
  * @typedef {Object} ProjectStarter
+ * @property {string} id
  * @property {string} title
  * @property {string} description
  * @property {string[]} requirements
@@ -104,5 +107,5 @@
  * @property {string} slideshow_pdf
  * @property {Exercise[]} exercises
  * @property {QuizQuestion[]} quiz_questions
- * @property {ProjectStarter} project
+ * @property {ProjectStarter[]} projects
  */

@@ -11,6 +11,9 @@
     "unit_id": {
       "type": "string"
     },
+    "project_id": {
+      "type": "string"
+    },
     "code": {
       "type": "string"
     },

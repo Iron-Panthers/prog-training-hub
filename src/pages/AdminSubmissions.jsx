@@ -20,24 +20,32 @@ function SubmissionsList({ user }) {
         QuizSubmission.list("-created_at", 50),
       ]);
 
+      // Many submissions share a unit — fetch each one only once.
+      const unitCache = new Map();
+      const loadUnit = (unitId) => {
+        if (!unitId) return Promise.resolve(null);
+        if (!unitCache.has(unitId)) {
+          unitCache.set(unitId, Unit.filter({ id: unitId }).then(([u]) => u || null));
+        }
+        return unitCache.get(unitId);
+      };
+
       const subs = await Promise.all(s.map(async (sub) => {
         const profile = sub.student_id ? await getProfile(sub.student_id) : null;
-        let unitTitle = sub.unit_title;
-        if (!unitTitle && sub.unit_id) {
-          const u = await Unit.filter({ id: sub.unit_id });
-          unitTitle = u?.[0]?.title || "";
-        }
-        return { ...sub, student_name: profile?.name || sub.student_id, unit_title: unitTitle };
+        const unit = await loadUnit(sub.unit_id);
+        const project = unit?.projects?.find(p => p.id === sub.project_id);
+        return {
+          ...sub,
+          student_name: profile?.name || sub.student_id,
+          unit_title: sub.unit_title || unit?.title || "",
+          project_title: project?.title || "",
+        };
       }));
 
       const quizzes = await Promise.all(q.map(async (qq) => {
         const profile = qq.student_id ? await getProfile(qq.student_id) : null;
-        let unitTitle = qq.unit_title;
-        if (!unitTitle && qq.unit_id) {
-          const u = await Unit.filter({ id: qq.unit_id });
-          unitTitle = u?.[0]?.title || "";
-        }
-        return { ...qq, student_name: profile?.name || qq.student_id, unit_title: unitTitle };
+        const unit = await loadUnit(qq.unit_id);
+        return { ...qq, student_name: profile?.name || qq.student_id, unit_title: qq.unit_title || unit?.title || "" };
       }));
 
       setSubmissions(subs);
@@ -112,7 +120,9 @@ function SubmissionsList({ user }) {
                         <span className="font-semibold text-foreground text-sm group-hover:text-orange transition-colors">
                           {sub.student_name}
                         </span>
-                        <span className="text-muted-foreground text-sm"> — {sub.unit_title}</span>
+                        <span className="text-muted-foreground text-sm">
+                          {" — "}{sub.unit_title}{sub.project_title && ` · ${sub.project_title}`}
+                        </span>
                         <p className="text-xs text-muted-foreground mt-0.5">
                           {formatDateValue(sub.created_at)} · {sub.admin_comments?.length || 0} comments
                         </p>
@@ -161,18 +171,31 @@ function SubmissionsList({ user }) {
 function SubmissionReview({ user }) {
   const { id } = useParams();
   const [sub, setSub] = useState(null);
+  const [unit, setUnit] = useState(null);
+  const [studentName, setStudentName] = useState("");
   const [newComment, setNewComment] = useState({ line_number: "", comment: "" });
   const [adding, setAdding] = useState(false);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    ProjectSubmission.filter({ id }).then(([s]) => {
+    (async () => {
+      const [s] = await ProjectSubmission.filter({ id });
       setSub(s || null);
       setStatus(s?.status || "submitted");
+      if (s) {
+        const [u, profile] = await Promise.all([
+          s.unit_id ? Unit.filter({ id: s.unit_id }).then(([found]) => found || null) : null,
+          s.student_id ? getProfile(s.student_id) : null,
+        ]);
+        setUnit(u);
+        setStudentName(profile?.name || s.student_id);
+      }
       setLoading(false);
-    });
+    })();
   }, [id]);
+
+  const project = unit?.projects?.find(p => p.id === sub?.project_id);
 
   const addComment = async () => {
     if (!newComment.comment) return;
@@ -211,8 +234,10 @@ function SubmissionReview({ user }) {
           </Link>
           <div className="flex items-start justify-between">
             <div>
-              <h1 className="text-xl font-black text-white">{sub.student_id}'s Submission</h1>
-              <p className="text-white/40 text-sm mt-0.5">{sub.unit_title}</p>
+              <h1 className="text-xl font-black text-white">{studentName}'s Submission</h1>
+              <p className="text-white/40 text-sm mt-0.5">
+                {unit?.title}{project?.title && ` · ${project.title}`}
+              </p>
             </div>
             <div className="flex gap-2 flex-wrap justify-end">
               {["submitted", "reviewed", "approved", "needs_revision"].map(s => (

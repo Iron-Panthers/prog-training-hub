@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { executeJava } from "@/api/entities";
 import { Play, RotateCcw, CheckCircle, Loader2 } from "lucide-react";
 import CodeMirror, { oneDark } from "@uiw/react-codemirror";
@@ -29,6 +29,14 @@ export default function JavaIDE({
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState(null);
   const [confirmingReset, setConfirmingReset] = useState(false);
+
+  // Files restored from storage never pass through updateFiles, so tell the
+  // parent about them up front — otherwise submitting without typing sends
+  // the starter code instead of the student's saved work.
+  useEffect(() => {
+    onFilesChange?.(files);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateFiles = (newFiles) => {
     setFiles(newFiles);

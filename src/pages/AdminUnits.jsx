@@ -21,9 +21,9 @@ const Section = ({ id, title, children, expandedSection, setExpandedSection }) =
 );
 
 const emptyUnit = {
-  title: "", description: "", topic: "basics", order: 1, is_published: false,
+  title: "", description: "", topic: "java", order: 1, is_published: false,
   slideshow_pdf: "", slideshow_embed: "", slideshow_url: "", exercises: [], quiz_questions: [],
-  project: { title: "", description: "", requirements: [], starter_code: "" }
+  projects: []
 };
 
 export default function AdminUnits() {
@@ -63,12 +63,14 @@ export default function AdminUnits() {
 
   const save = async () => {
     setSaving(true);
-    let data = form;
+    let data = { ...form };
+    // Units used to hold a single `project` object; projects is the list now.
+    delete /** @type {Record<string, unknown>} */ (data).project;
     if (pdfFile) {
       setUploadingPdf(true);
       try {
         const url = await uploadFile(pdfFile, 'slideshows');
-        data = { ...form, slideshow_pdf: url };
+        data = { ...data, slideshow_pdf: url };
         setForm(data);
       } finally {
         setUploadingPdf(false);
@@ -121,6 +123,20 @@ export default function AdminUnits() {
 
   const removeQuestion = (i) => {
     setForm({ ...form, quiz_questions: form.quiz_questions.filter((_, idx) => idx !== i) });
+  };
+
+  const addProject = () => {
+    setForm({ ...form, projects: [...(form.projects || []), { id: Date.now().toString(), title: "", description: "", requirements: [], starter_code: "" }] });
+  };
+
+  const updateProject = (i, data) => {
+    const ps = [...(form.projects || [])];
+    ps[i] = { ...ps[i], ...data };
+    setForm({ ...form, projects: ps });
+  };
+
+  const removeProject = (i) => {
+    setForm({ ...form, projects: form.projects.filter((_, idx) => idx !== i) });
   };
 
   const inputClass = "w-full bg-background border border-border rounded-xl px-4 py-2.5 text-foreground text-sm focus:outline-none focus:border-orange/50";
@@ -286,16 +302,27 @@ export default function AdminUnits() {
               </button>
             </Section>
 
-            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="project" title="🚀 Project">
-              <input value={form.project?.title || ""} onChange={e => setForm({ ...form, project: { ...form.project, title: e.target.value } })} className={inputClass} placeholder="Project title" />
-              <textarea value={form.project?.description || ""} onChange={e => setForm({ ...form, project: { ...form.project, description: e.target.value } })} className={`${inputClass} h-20 resize-none`} placeholder="Project description" />
-              <textarea
-                value={form.project?.requirements?.join("\n") || ""}
-                onChange={e => setForm({ ...form, project: { ...form.project, requirements: e.target.value.split("\n") } })}
-                className={`${inputClass} h-24 resize-none`}
-                placeholder="Requirements (one per line)"
-              />
-              <textarea value={form.project?.starter_code || ""} onChange={e => setForm({ ...form, project: { ...form.project, starter_code: e.target.value } })} className={`${inputClass} h-32 resize-none font-mono`} placeholder="Starter code" />
+            <Section expandedSection={expandedSection} setExpandedSection={setExpandedSection} id="project" title={`🚀 Projects (${form.projects?.length || 0})`}>
+              {form.projects?.map((p, i) => (
+                <div key={p.id || i} className="border border-border rounded-xl p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground">Project {i + 1}</span>
+                    <button onClick={() => removeProject(i)} className="text-muted-foreground hover:text-red-400"><X className="w-4 h-4" /></button>
+                  </div>
+                  <input value={p.title || ""} onChange={e => updateProject(i, { title: e.target.value })} className={inputClass} placeholder="Project title" />
+                  <textarea value={p.description || ""} onChange={e => updateProject(i, { description: e.target.value })} className={`${inputClass} h-20 resize-none`} placeholder="Project description" />
+                  <textarea
+                    value={p.requirements?.join("\n") || ""}
+                    onChange={e => updateProject(i, { requirements: e.target.value.split("\n") })}
+                    className={`${inputClass} h-24 resize-none`}
+                    placeholder="Requirements (one per line)"
+                  />
+                  <textarea value={p.starter_code || ""} onChange={e => updateProject(i, { starter_code: e.target.value })} className={`${inputClass} h-32 resize-none font-mono`} placeholder="Starter code" />
+                </div>
+              ))}
+              <button onClick={addProject} className="flex items-center gap-2 text-sm text-orange hover:text-orange-light font-semibold">
+                <Plus className="w-4 h-4" /> Add Project
+              </button>
             </Section>
 
             <div className="flex justify-end gap-3 pt-2">
@@ -329,7 +356,7 @@ export default function AdminUnits() {
                       <span className="font-semibold text-foreground text-sm">{unit.title}</span>
                       {!unit.is_published && <span className="text-xs text-muted-foreground">(Draft)</span>}
                     </div>
-                    <p className="text-xs text-muted-foreground">{TOPIC_LABELS[unit.topic]} · {unit.exercises?.length || 0} exercises · {unit.quiz_questions?.length || 0} questions</p>
+                    <p className="text-xs text-muted-foreground">{TOPIC_LABELS[unit.topic]} · {unit.exercises?.length || 0} exercises · {unit.quiz_questions?.length || 0} questions · {unit.projects?.length || 0} projects</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">

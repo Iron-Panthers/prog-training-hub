@@ -1,17 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Unit, ProjectSubmission, executeJava } from "@/api/entities";
+import { markProjectSubmitted } from "@/lib/progress";
+import { resolveProjectStorageKey } from "@/lib/projectFiles";
 import CodeMirror, { oneDark } from "@uiw/react-codemirror";
 import { java } from "@codemirror/lang-java";
 import FileTabs from "@/components/FileTabs";
 import { Play, Loader2, ArrowLeft, Send, List, Rocket, CheckCircle, Code2 } from "lucide-react";
 
+const DEFAULT_STARTER = `public class Project {\n    public static void main(String[] args) {\n        // Your project code here\n    }\n}`;
+
 export default function ProjectIDEPage({ user }) {
-  const { unitId } = useParams();
+  const { unitId, projectId } = useParams();
   const navigate = useNavigate();
-  const storageKey = `project-files-${unitId}`;
+  // Resolved once the unit loads and we know which project this is.
+  const storageKeyRef = useRef(null);
 
   const [unit, setUnit] = useState(null);
+  const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [files, setFiles] = useState([{ name: "Main.java", code: "" }]);
   const [activeFile, setActiveFile] = useState(0);
@@ -25,26 +31,36 @@ export default function ProjectIDEPage({ user }) {
 
   useEffect(() => {
     Unit.filter({ id: unitId }).then(data => {
-      if (data.length > 0) {
-        setUnit(data[0]);
-        try {
-          const saved = localStorage.getItem(storageKey);
-          if (saved) {
-            setFiles(JSON.parse(saved));
-            setLoading(false);
-            return;
-          }
-        } catch {}
-        const starterCode = data[0].project?.starter_code || `public class Project {\n    public static void main(String[] args) {\n        // Your project code here\n    }\n}`;
-        setFiles([{ name: "Main.java", code: starterCode }]);
+      const loaded = data[0];
+      if (loaded) {
+        const projects = loaded.projects || [];
+        // No project id in the URL means an old link — open the first one.
+        const current = projects.find(p => p.id === projectId) || projects[0] || null;
+        setUnit(loaded);
+        setProject(current);
+
+        if (current) {
+          const key = resolveProjectStorageKey(unitId, current.id);
+          storageKeyRef.current = key;
+          try {
+            const saved = localStorage.getItem(key);
+            if (saved) {
+              setFiles(JSON.parse(saved));
+              setLoading(false);
+              return;
+            }
+          } catch {}
+          setFiles([{ name: "Main.java", code: current.starter_code || DEFAULT_STARTER }]);
+        }
       }
       setLoading(false);
     }).catch(() => setLoading(false));
-  }, [unitId]);
+  }, [unitId, projectId]);
 
   const updateFiles = (newFiles) => {
     setFiles(newFiles);
-    try { localStorage.setItem(storageKey, JSON.stringify(newFiles)); } catch {}
+    if (!storageKeyRef.current) return;
+    try { localStorage.setItem(storageKeyRef.current, JSON.stringify(newFiles)); } catch {}
   };
 
   const addFile = () => {
@@ -92,7 +108,7 @@ export default function ProjectIDEPage({ user }) {
 
   const handleSubmit = async () => {
     const mainCode = files[0]?.code || "";
-    if (!mainCode.trim()) return;
+    if (!mainCode.trim() || !project) return;
     const code = files.length === 1
       ? files[0].code
       : files.map(f => `// ===== ${f.name} =====\n${f.code}`).join("\n\n");
@@ -101,11 +117,13 @@ export default function ProjectIDEPage({ user }) {
       await ProjectSubmission.create({
         student_id: user.id,
         unit_id: unitId,
+        project_id: project.id,
         code,
         notes,
         status: "submitted",
         created_at: new Date().toISOString(),
       });
+      await markProjectSubmitted(unit, user.id, project.id);
       setSubmitted(true);
     } catch {
       setError("Submission failed. Please try again.");
@@ -117,6 +135,20 @@ export default function ProjectIDEPage({ user }) {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="w-6 h-6 animate-spin text-orange" />
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-3">
+        <p className="text-muted-foreground text-sm">This project is no longer available.</p>
+        <button
+          onClick={() => navigate(`/units/${unitId}`)}
+          className="text-orange hover:underline text-sm flex items-center gap-1.5"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Unit
+        </button>
       </div>
     );
   }
@@ -153,7 +185,7 @@ export default function ProjectIDEPage({ user }) {
           <div className="w-px h-4 bg-white/20" />
           <Rocket className="w-4 h-4 text-orange" />
           <div>
-            <h1 className="text-white font-black text-sm">{unit?.project?.title || "Project"}</h1>
+            <h1 className="text-white font-black text-sm">{project?.title || "Project"}</h1>
             <p className="text-white/30 text-xs">{unit?.title}</p>
           </div>
         </div>
@@ -202,13 +234,13 @@ export default function ProjectIDEPage({ user }) {
         {/* Right panel */}
         <div className="md:w-80 bg-[#11111b] border-t md:border-t-0 md:border-l border-white/10 flex flex-col min-h-0">
           {/* Requirements */}
-          {unit?.project?.requirements?.length > 0 && (
+          {project?.requirements?.length > 0 && (
             <div className="p-4 border-b border-white/10 flex-shrink-0">
               <p className="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3 flex items-center gap-2">
                 <List className="w-3.5 h-3.5" /> Requirements
               </p>
               <ul className="space-y-1.5">
-                {unit.project.requirements.map((req, i) => (
+                {project.requirements.map((req, i) => (
                   <li key={i} className="flex items-start gap-2 text-xs text-white/50">
                     <span className="w-1.5 h-1.5 rounded-full bg-orange flex-shrink-0 mt-1" />
                     {req}

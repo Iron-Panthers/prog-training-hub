@@ -84,8 +84,20 @@ const AuthenticatedApp = () => {
           ) : <Navigate to="/" />
         }
       />
+      {/* Bare :unitId kept for links made before a unit could hold several
+          projects — it resolves to the unit's first project. */}
       <Route
         path="/project-ide/:unitId"
+        element={
+          user ? (
+            <AppShell authUser={user} profile={profile}>
+              <ProjectIDEPage user={profile} />
+            </AppShell>
+          ) : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/project-ide/:unitId/:projectId"
         element={
           user ? (
             <AppShell authUser={user} profile={profile}>

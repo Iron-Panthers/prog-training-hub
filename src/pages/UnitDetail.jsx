@@ -4,7 +4,8 @@ import { Unit, StudentProgress } from "@/api/entities";
 import { ArrowLeft, BookOpen, Code2, HelpCircle, Rocket, CheckCircle } from "lucide-react";
 import JavaIDE from "@/components/JavaIDE";
 import QuizSection from "@/components/QuizSection";
-import ProjectSection from "@/components/ProjectSection";
+import ProjectsTab from "@/components/ProjectsTab";
+import { computeUnitProgress, withProjectSubmitted } from "@/lib/progress";
 import SlideshowViewer from "@/components/SlideshowViewer";
 
 const TABS = [
@@ -55,17 +56,11 @@ export default function UnitDetail({ user }) {
     }
   };
 
-  const recalcProgress = (p) => {
-    if (!unit) return;
-    let score = 0;
-    let total = 0;
-    if (unit.slideshow_pdf || unit.slideshow_embed || unit.slideshow_url) { total++; if (p.slideshow_completed) score++; }
-    const exCount = unit.exercises?.length || 0;
-    if (exCount > 0) { total++; if ((p.exercises_completed?.length || 0) >= exCount) score++; }
-    if (unit.quiz_questions?.length > 0) { total++; if (p.quiz_completed) score++; }
-    if (unit.project?.title) { total++; if (p.project_submitted) score++; }
-    const pct = total > 0 ? Math.round((score / total) * 100) : 0;
-    StudentProgress.update(p.id, { overall_progress: pct });
+  const recalcProgress = async (p) => {
+    if (!unit) return p;
+    const updated = await StudentProgress.update(p.id, { overall_progress: computeUnitProgress(unit, p) });
+    setProgress(updated);
+    return updated;
   };
 
   if (loading) {
@@ -89,13 +84,19 @@ export default function UnitDetail({ user }) {
 
   const overallProg = progress?.overall_progress || 0;
 
+  const projects = unit.projects || [];
+  const allProjectsSubmitted = projects.length > 0
+    && projects.every(p => progress?.projects_submitted?.includes(p.id));
+
   const availableTabs = TABS.filter(t => {
     if (t.key === "slideshow") return unit.slideshow_pdf || unit.slideshow_embed || unit.slideshow_url;
     if (t.key === "exercises") return unit.exercises?.length > 0;
     if (t.key === "quiz") return unit.quiz_questions?.length > 0;
-    if (t.key === "project") return unit.project?.title;
+    if (t.key === "project") return projects.length > 0;
     return false;
-  });
+  }).map(t => (
+    t.key === "project" && projects.length > 1 ? { ...t, label: "Projects" } : t
+  ));
 
   return (
     <div className="min-h-screen bg-background">
@@ -142,7 +143,7 @@ export default function UnitDetail({ user }) {
                 {tab.label}
                 {tab.key === "slideshow" && progress?.slideshow_completed && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
                 {tab.key === "quiz" && progress?.quiz_completed && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
-                {tab.key === "project" && progress?.project_submitted && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
+                {tab.key === "project" && allProjectsSubmitted && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
               </button>
             ))}
           </div>
@@ -210,13 +211,14 @@ export default function UnitDetail({ user }) {
           />
         )}
 
-        {activeTab === "project" && unit.project?.title && (
-          <ProjectSection
+        {activeTab === "project" && projects.length > 0 && (
+          <ProjectsTab
             unit={unit}
             user={user}
             progress={progress}
-            onSubmit={() => {
-              upsertProgress({ project_submitted: true }).then(recalcProgress);
+            onSubmit={(projectId) => {
+              upsertProgress({ projects_submitted: withProjectSubmitted(progress, projectId) })
+                .then(recalcProgress);
             }}
           />
         )}

@@ -81,13 +81,30 @@ function entityAPI<T>(table: string, parse: (row: unknown) => T = (r) => r as T)
   };
 }
 
+/**
+ * Id given to the single project a unit used to hold before projects became a
+ * list. Rows written before that migration have no project id of their own, so
+ * they are all normalized to this one.
+ */
+export const LEGACY_PROJECT_ID = 'legacy';
+
+function parseProjects(r: Record<string, unknown>): ProjectStarter[] {
+  const list = parseJSON<ProjectStarter[]>(r.projects, []);
+  if (Array.isArray(list) && list.length > 0) {
+    return list.map((p, i) => ({ ...p, id: p?.id || String(i) }));
+  }
+  const legacy = parseJSON<ProjectStarter | null>(r.project, null);
+  if (legacy?.title) return [{ ...legacy, id: legacy.id || LEGACY_PROJECT_ID }];
+  return [];
+}
+
 function parseUnit(row: unknown): UnitType {
   const r = row as Record<string, unknown>;
   return {
     ...r,
     exercises: parseJSON<Exercise[]>(r.exercises, []),
     quiz_questions: parseJSON<QuizQuestion[]>(r.quiz_questions, []),
-    project: parseJSON<ProjectStarter>(r.project, { title: '', description: '', requirements: [], starter_code: '' }),
+    projects: parseProjects(r),
   } as UnitType;
 }
 
@@ -95,6 +112,7 @@ function parseProjectSubmission(row: unknown): ProjectSubmissionType {
   const r = row as Record<string, unknown>;
   return {
     ...r,
+    project_id: (r.project_id as string) || LEGACY_PROJECT_ID,
     admin_comments: parseJSON<ProjectAdminComments[]>(r.admin_comments, []),
   } as ProjectSubmissionType;
 }
@@ -112,6 +130,10 @@ function parseStudentProgress(row: unknown): StudentProgressType {
   return {
     ...r,
     exercises_completed: parseJSON<string[]>(r.exercises_completed, []),
+    projects_submitted: parseJSON<string[]>(
+      r.projects_submitted,
+      r.project_submitted ? [LEGACY_PROJECT_ID] : [],
+    ),
   } as StudentProgressType;
 }
 
