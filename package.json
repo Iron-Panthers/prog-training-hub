@@ -11,6 +11,7 @@
     "typecheck": "tsc -p ./jsconfig.json",
     "preview": "vite preview"
   },
+  "homepage": "http://proghub.ironpanthers.com/",
   "dependencies": {
     "@codemirror/lang-java": "^6.0.2",
     "@hello-pangea/dnd": "^17.0.0",
