@@ -1,0 +1,8 @@
+{
+  "name": "Programming Training Hub | Iron Panthers",
+  "short_name": "ProgHub",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
