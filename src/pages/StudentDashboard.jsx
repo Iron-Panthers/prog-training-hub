@@ -169,10 +169,10 @@ export default function StudentDashboard({ user }) {
                     to={`/units/${unit.id}`}
                     className="bg-card border border-border hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 group block"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
+                    <div className="flex items-start justify-between mb-0">
+                      {/* <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
                         {topicLabels[unit.topic] || unit.topic}
-                      </span>
+                      </span> */}
                       {prog === 100 && (
                         <span className="text-xs text-green-400 font-semibold flex items-center gap-1">
                           <Trophy className="w-3 h-3" /> Done
