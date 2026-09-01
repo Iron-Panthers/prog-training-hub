@@ -133,7 +133,7 @@ export default function JavaIDE({
           <button
             onClick={runCode}
             disabled={running}
-            className="flex items-center gap-1.5 bg-orange hover:bg-orange-light text-white text-xs font-semibold px-3 py-1.5 rounded-md transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 text-xs font-semibold px-3 py-1.5 rounded-md transition-all disabled:opacity-50"
           >
             {running ? <Loader2 className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3" />}
             {running ? "Running..." : "Run"}

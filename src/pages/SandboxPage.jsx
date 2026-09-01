@@ -164,7 +164,7 @@ export default function SandboxPage() {
           <button
             onClick={runCode}
             disabled={running}
-            className="flex items-center gap-1.5 bg-orange hover:bg-orange-light text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all disabled:opacity-50 shadow-lg shadow-orange/30"
+            className="flex items-center gap-1.5 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 text-xs font-bold px-4 py-1.5 rounded-lg transition-all disabled:opacity-50"
           >
             {running ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
             {running ? "Running..." : "Run Code"}

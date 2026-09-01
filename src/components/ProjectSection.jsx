@@ -102,7 +102,7 @@ export default function ProjectSection({ unit, project, user, progress, onSubmit
             <button
               onClick={() => { setConfirmingSubmit(false); handleSubmit(); }}
               disabled={submitting}
-              className="flex-1 flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-3 rounded-xl transition-all"
+              className="flex-1 flex items-center justify-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-40 text-white border border-orange/40 font-bold py-3 rounded-xl transition-all"
             >
               {submitting ? (
                 <><div className="w-4 h-4 border-2 border-white/50 border-t-white rounded-full animate-spin" /> Submitting...</>
@@ -122,7 +122,7 @@ export default function ProjectSection({ unit, project, user, progress, onSubmit
         <button
           onClick={() => setConfirmingSubmit(true)}
           disabled={submitting}
-          className="w-full flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-3.5 rounded-xl transition-all"
+          className="w-full flex items-center justify-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-40 text-white border border-orange/40 font-bold py-3.5 rounded-xl transition-all"
         >
           <Send className="w-4 h-4" /> Submit Project
         </button>

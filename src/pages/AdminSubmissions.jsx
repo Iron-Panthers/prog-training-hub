@@ -74,7 +74,7 @@ function SubmissionsList({ user }) {
                 key={t}
                 onClick={() => setTab(t)}
                 className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all capitalize ${
-                  tab === t ? "bg-orange text-white" : "bg-white/10 text-white/60 hover:text-white"
+                  tab === t ? "bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 text-white border border-orange/40" : "bg-white/10 text-white/60 hover:text-white"
                 }`}
               >
                 {t}
@@ -93,7 +93,7 @@ function SubmissionsList({ user }) {
                   key={s}
                   onClick={() => setFilter(s)}
                   className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all capitalize ${
-                    filter === s ? "bg-orange border-orange text-white" : "border-border text-muted-foreground hover:border-orange/40"
+                    filter === s ? "bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 border-orange/40 text-white" : "border-border text-muted-foreground hover:border-orange/40"
                   }`}
                 >
                   {s.replace("_", " ")}
@@ -245,7 +245,7 @@ function SubmissionReview({ user }) {
                   key={s}
                   onClick={() => updateStatus(s)}
                   className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all capitalize ${
-                    status === s ? "bg-orange border-orange text-white" : "border-white/20 text-white/60 hover:text-white"
+                    status === s ? "bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 border-orange/40 text-white" : "border-white/20 text-white/60 hover:text-white"
                   }`}
                 >
                   {s.replace("_", " ")}
@@ -296,7 +296,7 @@ function SubmissionReview({ user }) {
               <button
                 onClick={addComment}
                 disabled={adding || !newComment.comment}
-                className="w-full flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-semibold py-2 rounded-xl transition-all text-sm"
+                className="w-full flex items-center justify-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-40 text-white border border-orange/40 font-semibold py-2 rounded-xl transition-all text-sm"
               >
                 {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 Add Comment

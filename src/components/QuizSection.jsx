@@ -52,7 +52,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
         </p>
         <button
           onClick={handleRetry}
-          className="flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all mx-auto"
+          className="flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 font-semibold px-5 py-2.5 rounded-xl transition-all mx-auto"
         >
           <RotateCcw className="w-4 h-4" /> Retake Quiz
         </button>
@@ -70,7 +70,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
           </div>
           <p className="text-foreground font-semibold">{score}/{questions.length} correct</p>
           <p className="text-muted-foreground text-sm mt-1">{pct >= 70 ? "Great job! 🎉" : "Keep practicing!"}</p>
-          <button onClick={handleRetry} className="mt-4 flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all mx-auto">
+          <button onClick={handleRetry} className="mt-4 flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 font-semibold px-5 py-2.5 rounded-xl transition-all mx-auto">
             <RotateCcw className="w-4 h-4" /> Retry
           </button>
         </div>
@@ -137,7 +137,7 @@ export default function QuizSection({ unit, user, progress, onComplete }) {
       <button
         onClick={handleSubmit}
         disabled={Object.keys(answers).length < questions.length}
-        className="w-full bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-3 rounded-xl transition-all"
+        className="w-full bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-40 text-white border border-orange/40 font-bold py-3 rounded-xl transition-all"
       >
         Submit Quiz
       </button>

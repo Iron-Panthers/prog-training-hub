@@ -192,7 +192,7 @@ export default function ProjectIDEPage({ user }) {
         <button
           onClick={runCode}
           disabled={running}
-          className="flex items-center gap-1.5 bg-orange hover:bg-orange-light text-white text-xs font-bold px-4 py-1.5 rounded-lg transition-all disabled:opacity-50 shadow-lg shadow-orange/30"
+          className="flex items-center gap-1.5 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 text-xs font-bold px-4 py-1.5 rounded-lg transition-all disabled:opacity-50"
         >
           {running ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
           {running ? "Running..." : "Run Code"}
@@ -285,7 +285,7 @@ export default function ProjectIDEPage({ user }) {
                   <button
                     onClick={() => { setConfirmingSubmit(false); handleSubmit(); }}
                     disabled={submitting}
-                    className="flex-1 flex items-center justify-center gap-1.5 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-2 rounded-lg transition-all text-xs"
+                    className="flex-1 flex items-center justify-center gap-1.5 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-40 text-white border border-orange/40 font-bold py-2 rounded-lg transition-all text-xs"
                   >
                     {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                     {submitting ? "Submitting..." : "Yes, Submit"}
@@ -302,7 +302,7 @@ export default function ProjectIDEPage({ user }) {
               <button
                 onClick={() => setConfirmingSubmit(true)}
                 disabled={submitting || !files[0]?.code.trim()}
-                className="w-full flex items-center justify-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-40 text-white font-bold py-2.5 rounded-lg transition-all text-sm"
+                className="w-full flex items-center justify-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-40 text-white border border-orange/40 font-bold py-2.5 rounded-lg transition-all text-sm"
               >
                 <Send className="w-4 h-4" /> Submit Project
               </button>

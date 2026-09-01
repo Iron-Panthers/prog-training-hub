@@ -105,7 +105,7 @@ export default function AdminAnnouncements({ user }) {
           </div>
           <button
             onClick={() => { setEditingId(null); setForm({ title: "", content: "", type: "update", is_pinned: false, image_url: "" }); setImageFile(null); setImagePreview(""); setShowForm(!showForm); }}
-            className="flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-orange/30"
+            className="flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 font-semibold px-5 py-2.5 rounded-xl transition-all"
           >
             <Plus className="w-4 h-4" /> New Post
           </button>
@@ -132,7 +132,7 @@ export default function AdminAnnouncements({ user }) {
                     type="button"
                     onClick={() => setForm({ ...form, type: t })}
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all capitalize ${
-                      form.type === t ? "bg-orange border-orange text-white" : "border-border text-muted-foreground hover:border-orange/40"
+                      form.type === t ? "bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 border-orange/40 text-white" : "border-border text-muted-foreground hover:border-orange/40"
                     }`}
                   >
                     {t}
@@ -190,7 +190,7 @@ export default function AdminAnnouncements({ user }) {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-xl transition-all text-sm"
+                  className="flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-50 text-white border border-orange/40 font-semibold px-5 py-2 rounded-xl transition-all text-sm"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                   {submitting ? (editingId ? "Updating..." : "Posting...") : (editingId ? "Update" : "Post")}

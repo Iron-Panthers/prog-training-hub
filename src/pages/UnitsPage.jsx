@@ -76,7 +76,7 @@ export default function UnitsPage({ user }) {
               onClick={() => setFilter(t)}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
                 filter === t
-                  ? "bg-orange border-orange text-white"
+                  ? "bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 border-orange/40 text-white"
                   : "bg-card border-border text-muted-foreground hover:border-orange/40 hover:text-foreground"
               }`}
             >

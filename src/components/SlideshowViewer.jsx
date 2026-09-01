@@ -170,7 +170,7 @@ export default function SlideshowViewer({ unit, completed, onComplete }) {
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <button
               onClick={enterPresent}
-              className="flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-orange/30"
+              className="flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 font-semibold px-5 py-2.5 rounded-xl transition-all"
             >
               <Maximize2 className="w-4 h-4" /> Present with IDE
             </button>

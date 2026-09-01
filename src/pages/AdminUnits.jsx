@@ -152,7 +152,7 @@ export default function AdminUnits() {
           </div>
           <button
             onClick={startNew}
-            className="flex items-center gap-2 bg-orange hover:bg-orange-light text-white font-semibold px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-orange/30"
+            className="flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 text-white border border-orange/40 font-semibold px-5 py-2.5 rounded-xl transition-all"
           >
             <Plus className="w-4 h-4" /> New Unit
           </button>
@@ -327,7 +327,7 @@ export default function AdminUnits() {
 
             <div className="flex justify-end gap-3 pt-2">
               <button onClick={() => setEditing(null)} className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground border border-border rounded-xl transition-all">Cancel</button>
-              <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-orange hover:bg-orange-light disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-xl transition-all text-sm">
+              <button onClick={save} disabled={saving} className="flex items-center gap-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 hover:bg-orange/70 disabled:opacity-50 text-white border border-orange/40 font-semibold px-5 py-2 rounded-xl transition-all text-sm">
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                 {uploadingPdf ? "Uploading PDF..." : saving ? "Saving..." : "Save Unit"}
               </button>

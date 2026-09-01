@@ -67,7 +67,7 @@ export default function SettingsPage() {
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
-                className="px-4 py-2 bg-orange text-white rounded-lg text-sm font-semibold hover:bg-orange/80 transition-colors disabled:opacity-50"
+                className="px-4 py-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 text-white border border-orange/40 rounded-lg text-sm font-semibold hover:bg-orange/70 transition-colors disabled:opacity-50"
               >
                 {uploading ? "Uploading…" : "Upload Photo"}
               </button>
@@ -100,7 +100,7 @@ export default function SettingsPage() {
             <button
               onClick={handleSaveName}
               disabled={saving || !name.trim()}
-              className="px-4 py-2 bg-orange text-white rounded-lg text-sm font-semibold hover:bg-orange/80 transition-colors disabled:opacity-50 flex items-center gap-2 min-w-[80px] justify-center"
+              className="px-4 py-2 bg-orange/60 shadow-[0_0_8px_-2px] shadow-orange/40 text-white border border-orange/40 rounded-lg text-sm font-semibold hover:bg-orange/70 transition-colors disabled:opacity-50 flex items-center gap-2 min-w-[80px] justify-center"
             >
               {saving ? (
                 <Loader2 className="w-4 h-4 animate-spin" />

@@ -39,7 +39,7 @@ export default function AppShell({ authUser, profile, children }) {
         onClick={() => setMobileOpen(false)}
         className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group ${
           active
-            ? "bg-primary text-white shadow-lg shadow-primary/30"
+            ? "bg-primary/60 text-white border border-primary/40 shadow-[0_0_8px_-2px] shadow-primary/40"
             : "text-white/60 hover:text-white hover:bg-white/10"
         } ${collapsed && !mobile ? "justify-center" : ""}`}
       >

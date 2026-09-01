@@ -58,15 +58,14 @@ export default function StudentDashboard({ user }) {
                 userName={user?.name}
                 className="mb-4"
               />
-              <p className="text-white/50 text-sm font-medium mb-1">Welcome back,</p>
+              <p className="text-white/50 text-sm font-medium mb-0">Welcome back,</p>
               <h1 className="text-3xl font-black text-white">
                 {user?.name?.split(" ")[0]} <span className="text-orange"></span>
               </h1>
-              <p className="text-white/40 text-sm mt-1">Ready to write some Java?</p>
             </div>
             <Link
               to="/sandbox"
-              className="hidden md:flex items-center gap-2 bg-primary hover:bg-primary/80 text-white font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105"
+              className="hidden md:flex items-center gap-2 bg-primary/60 hover:bg-primary/70 text-white border border-primary/40 shadow-[0_0_8px_-2px] shadow-primary/40 font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105"
             >
               <Code2 className="w-4 h-4" />
               Open Sandbox
