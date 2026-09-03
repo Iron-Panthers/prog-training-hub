@@ -67,7 +67,7 @@ export default function AppShell({ authUser, profile, children }) {
           </div>
         )}
       </div>
-
+{/* 
       {/* Role badge */}
       {(!collapsed || mobile) && (
         <div className="px-4 pt-4">
@@ -77,7 +77,7 @@ export default function AppShell({ authUser, profile, children }) {
             {isAdmin ? "Admin" : "Student"}
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Nav */}
       <nav className="flex-1 min-h-0 px-3 py-4 space-y-1 overflow-y-auto no-scrollbar">
