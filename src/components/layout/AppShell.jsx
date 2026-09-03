@@ -67,8 +67,8 @@ export default function AppShell({ authUser, profile, children }) {
           </div>
         )}
       </div>
-{/* 
-      {/* Role badge */}
+      {/* 
+      {/* Role badge }
       {(!collapsed || mobile) && (
         <div className="px-4 pt-4">
           <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold text-center ${

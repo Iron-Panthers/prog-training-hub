@@ -22,7 +22,7 @@ const SegmentBar = ({ counts, total }) => (
 
 const SegmentLegend = ({ counts, total }) => (
   <div className="flex gap-2 flex-wrap mt-2">
-    {STATUS_BUCKETS.map(b => (
+    {STATUS_BUCKETS.map(b => b.key !== 'none' && (
       <span key={b.key} className={`text-xs px-2 py-0.5 rounded-full border font-semibold ${b.pill}`}>
         {b.label} {percent(counts[b.key], total)}% ({counts[b.key]})
       </span>
@@ -381,7 +381,7 @@ function UnitReport() {
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="bg-card border border-border rounded-2xl p-5">
+              {/* <div className="bg-card border border-border rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-sm font-semibold text-foreground">All projects</span>
                   <span className="text-xs text-muted-foreground">
@@ -390,18 +390,19 @@ function UnitReport() {
                 </div>
                 <SegmentBar counts={summary.buckets} total={summary.projectCount} />
                 <SegmentLegend counts={summary.buckets} total={summary.projectCount} />
-              </div>
+              </div> */}
 
               {(unit.projects || []).map(project => {
                 const subs = projectsByProject.get(project.id) || [];
                 const students = new Set(subs.map(s => s.student_id));
                 const buckets = countBuckets(subs);
+                buckets['none'] = Math.max(0, summary.total - (buckets['pending'] + buckets['returned'] + buckets['approved']));
                 return (
                   <div key={project.id} className="bg-card border border-border rounded-2xl p-5">
                     <div className="flex items-center justify-between gap-3 mb-1.5">
                       <span className="text-sm font-semibold text-foreground truncate">{project.title || "Untitled project"}</span>
                       <span className="text-xs text-muted-foreground flex-shrink-0">
-                        {students.size}/{summary.total} submitted ({percent(students.size, summary.total)}%)
+                        {students.size}/{summary.total} submitted
                       </span>
                     </div>
                     {subs.length === 0 ? (

@@ -10,6 +10,7 @@ export const STATUS_BUCKETS = [
   { key: "approved", label: "Approved", bar: "bg-green-500/70", pill: "bg-green-500/10 text-green-400 border-green-500/20" },
   { key: "returned", label: "Returned", bar: "bg-red-500/70", pill: "bg-red-500/10 text-red-400 border-red-500/20" },
   { key: "pending", label: "Pending", bar: "bg-yellow-500/70", pill: "bg-yellow-500/10 text-yellow-400 border-yellow-500/20" },
+  { key: "none", label: "", bar: "", pill: "" },
 ];
 
 export function statusBucket(status) {
