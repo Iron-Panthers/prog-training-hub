@@ -42,7 +42,7 @@ const AuthenticatedApp = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Navigate to="/dashboard" />} />
       <Route path="/login" element={<Login />} />
 
       {/* Student routes */}
@@ -53,7 +53,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <StudentDashboard user={profile} />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
       <Route
@@ -63,7 +63,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <UnitsPage user={profile} />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
       <Route
@@ -73,7 +73,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <UnitDetail user={profile} />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
       <Route
@@ -83,7 +83,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <SandboxPage />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
       {/* Bare :unitId kept for links made before a unit could hold several
@@ -95,7 +95,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <ProjectIDEPage user={profile} />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
       <Route
@@ -105,7 +105,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <ProjectIDEPage user={profile} />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
 
@@ -117,7 +117,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <AdminDashboard user={profile} />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -127,7 +127,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <AdminAnnouncements user={profile} />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -137,7 +137,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <SubmissionsList user={profile} />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -147,7 +147,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <SubmissionReview user={profile} />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -157,7 +157,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <RosterList />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -167,7 +167,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <StudentReport />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -177,7 +177,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <UnitReportsList />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -187,7 +187,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <UnitReport />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
       <Route
@@ -197,7 +197,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <AdminUnits />
             </AppShell>
-          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
         }
       />
 
@@ -208,7 +208,7 @@ const AuthenticatedApp = () => {
             <AppShell authUser={user} profile={profile}>
               <SettingsPage />
             </AppShell>
-          ) : <Navigate to="/" />
+          ) : <Navigate to="/login" />
         }
       />
 
