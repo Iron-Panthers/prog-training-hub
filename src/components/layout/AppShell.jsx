@@ -6,7 +6,7 @@ import redLogo from "@/assets/redLogo.svg";
 import {
   Home, BookOpen, Code2, LayoutDashboard,
   ChevronLeft, ChevronRight, LogOut, Menu, X,
-  ClipboardList, Megaphone
+  ClipboardList, Megaphone, Users, BarChart3
 } from "lucide-react";
 
 const studentNav = [
@@ -19,6 +19,8 @@ const adminNav = [
   { label: "Admin Home", icon: LayoutDashboard, path: "/admin" },
   { label: "Announcements", icon: Megaphone, path: "/admin/announcements" },
   { label: "Submissions", icon: ClipboardList, path: "/admin/submissions" },
+  { label: "Roster", icon: Users, path: "/admin/roster" },
+  { label: "Unit Reports", icon: BarChart3, path: "/admin/unit-reports" },
   { label: "Manage Units", icon: BookOpen, path: "/admin/units" },
 ];
 

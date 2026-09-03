@@ -16,6 +16,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminAnnouncements from './pages/AdminAnnouncements';
 import AdminUnits from './pages/AdminUnits';
 import { SubmissionsList, SubmissionReview } from './pages/AdminSubmissions';
+import { RosterList, StudentReport } from './pages/AdminRoster';
+import { UnitReportsList, UnitReport } from './pages/AdminUnitReports';
 import SettingsPage from './pages/Settings';
 import ProjectIDEPage from './pages/ProjectIDEPage';
 
@@ -144,6 +146,46 @@ const AuthenticatedApp = () => {
           user && isAdmin ? (
             <AppShell authUser={user} profile={profile}>
               <SubmissionReview user={profile} />
+            </AppShell>
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/admin/roster"
+        element={
+          user && isAdmin ? (
+            <AppShell authUser={user} profile={profile}>
+              <RosterList />
+            </AppShell>
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/admin/roster/:studentId"
+        element={
+          user && isAdmin ? (
+            <AppShell authUser={user} profile={profile}>
+              <StudentReport />
+            </AppShell>
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/admin/unit-reports"
+        element={
+          user && isAdmin ? (
+            <AppShell authUser={user} profile={profile}>
+              <UnitReportsList />
+            </AppShell>
+          ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
+        }
+      />
+      <Route
+        path="/admin/unit-reports/:unitId"
+        element={
+          user && isAdmin ? (
+            <AppShell authUser={user} profile={profile}>
+              <UnitReport />
             </AppShell>
           ) : user ? <Navigate to="/dashboard" /> : <Navigate to="/" />
         }

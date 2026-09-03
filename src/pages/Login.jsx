@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import redLogo from "@/assets/redLogo.svg";
@@ -7,19 +7,55 @@ import whiteLogo from "@/assets/whiteLogo.svg";
 
 export default function Login() {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoadingAuth } = useAuth();
+  const { user, loading } = useAuth();
+  const [ loginEmail, setLoginEmail ] = useState('');
+  const [ loginPassword, setLoginPassword ] = useState('');
+  const [ loginError, setLoginError ] = useState('');
+  const [ notice, setNotice ] = useState('');
+  const [ signingIn, setSigningIn ] = useState('none');
 
   useEffect(() => {
-    if (!isLoadingAuth && isAuthenticated) {
+    if (!loading && user) {
       navigate("/dashboard");
     }
-  }, [isAuthenticated, isLoadingAuth, navigate]);
+  }, [user, loading, navigate]);
 
   const handleGoogleLogin = () => {
     supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/dashboard` },
     });
+  };
+
+  // preventDefault has to come first: anything that throws above it lets the
+  // browser fall through to a native GET submit and reload the page.
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    // The button that submitted the form is on the native event, not on
+    // React's synthetic one.
+    const mode = e.nativeEvent.submitter?.value === 'signup' ? 'signup' : 'login';
+    setSigningIn(mode);
+    setLoginError('');
+    setNotice('');
+
+    if (mode === 'signup') {
+      const { data, error } = await supabase.auth.signUp({
+        email: loginEmail,
+        password: loginPassword,
+        options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+      });
+      if (error) setLoginError(error.message);
+      // With email confirmation turned on, signUp returns a user but no
+      // session — the redirect only happens once they confirm.
+      else if (!data.session) setNotice("Check your email to confirm your account, then log in.");
+    } else {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+      if (error) setLoginError(error.message);
+    }
+    setSigningIn('none');
   };
 
   return (
@@ -71,6 +107,48 @@ export default function Login() {
           </button>
 
           <div className="mt-6 pt-6 border-t border-white/10 text-center">
+            <form onSubmit={handleEmailSubmit}>
+              <input
+                type="email"
+                autoComplete="email"
+                value={loginEmail}
+                onChange={e => setLoginEmail(e.target.value)}
+                placeholder="example@gmail.com"
+                className="w-full text-sm bg-white/10 border border-white/20 text-white placeholder-white/30 py-3.5 px-5 rounded-xl mb-2 focus:outline-none focus:border-primary/60"
+              />
+              <input
+                type="password"
+                autoComplete="current-password"
+                value={loginPassword}
+                onChange={e => setLoginPassword(e.target.value)}
+                placeholder="password123"
+                className="w-full text-sm bg-white/10 border border-white/20 text-white placeholder-white/30 py-3.5 px-5 rounded-xl mb-2 focus:outline-none focus:border-primary/60"
+              />
+              {loginError && (
+                <p className="text-red-400 text-xs text-left mb-2">{loginError}</p>
+              )}
+              {notice && (
+                <p className="text-white/60 text-xs text-left mb-2">{notice}</p>
+              )}
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="submit"
+                  disabled={signingIn !== 'none' || !loginEmail || !loginPassword}
+                  className="w-full flex items-center justify-center gap-3 bg-primary/90 hover:bg-primary/80 disabled:opacity-40 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100 mb-4"
+                >
+                  {signingIn == 'login' ? "Signing in..." : "Login"}
+                </button>
+                <button
+                  type="submit"
+                  value='signup'
+                  disabled={signingIn !== 'none' || !loginEmail || !loginPassword}
+                  className="w-full flex items-center justify-center gap-3 bg-primary/60 hover:bg-primary/50 disabled:opacity-40 text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100 mb-4"
+                >
+                  {signingIn == 'signup' ? "Signing up..." : "Sign Up"}
+                </button>
+              </div>
+              
+            </form>
             <p className="text-white/30 text-xs">
               what a cool prog training app
             </p>

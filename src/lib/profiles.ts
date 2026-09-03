@@ -16,6 +16,20 @@ export async function getProfile(userId: string): Promise<Profile | null> {
   return data;
 }
 
+export async function listProfiles(): Promise<Profile[]> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .order("name");
+
+  if (error) {
+    console.error("Error fetching profiles:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
 export async function updateProfile(
   userId: string,
   updates: Partial<Profile>
