@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Announcement, Unit, StudentProgress } from "@/api/entities";
-import { BookOpen, Code2, TrendingUp, Bell, ChevronRight, Pin, Zap, Trophy, Clock } from "lucide-react";
+import { BookOpen, Code2, TrendingUp, ChevronRight, Pin, Trophy, Clock } from "lucide-react";
 import CosmeticAvatar from "../components/CosmeticAvatar";
 
 const topicColors = {
@@ -15,6 +15,25 @@ const topicLabels = {
   "robo": "Robocode",
   "frc": "FRC"
 };
+
+/**
+ * Section header centered on a faint rule that runs the width of the content
+ * column, cut out around the title and around any trailing action. The equal
+ * 1fr side columns keep the title dead-centered whether or not there is an
+ * action taking up room on the right.
+ */
+function SectionHeading({ children, action }) {
+  return (
+    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 mb-4">
+      <div className="h-px bg-border" />
+      <h2 className="text-lg font-bold text-foreground whitespace-nowrap">{children}</h2>
+      <div className="flex items-center gap-4">
+        <div className="flex-1 h-px bg-border" />
+        {action}
+      </div>
+    </div>
+  );
+}
 
 export default function StudentDashboard({ user }) {
   const [announcements, setAnnouncements] = useState([]);
@@ -93,12 +112,7 @@ export default function StudentDashboard({ user }) {
         {/* Announcements */}
         {announcements.length > 0 && (
           <section className="animate-fade-in">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                <Bell className="w-5 h-5 text-primary" />
-                Updates & Reminders
-              </h2>
-            </div>
+            <SectionHeading>Updates &amp; Reminders</SectionHeading>
             <div className="space-y-3">
               {announcements.map((ann) => (
                 <div
@@ -134,15 +148,15 @@ export default function StudentDashboard({ user }) {
 
         {/* Units */}
         <section className="animate-fade-in">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-primary" />
-              Training Units
-            </h2>
-            <Link to="/units" className="text-primary text-sm font-medium hover:underline flex items-center gap-1">
-              View all <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
+          <SectionHeading
+            action={
+              <Link to="/units" className="text-primary text-sm font-medium hover:underline flex items-center gap-1 whitespace-nowrap">
+                View all <ChevronRight className="w-4 h-4" />
+              </Link>
+            }
+          >
+            Training Units
+          </SectionHeading>
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {[1,2,3].map(i => (
@@ -160,7 +174,7 @@ export default function StudentDashboard({ user }) {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {units.slice(0, 6).map((unit) => {
+              {units.filter(u => progress.find(p => p.unit_id === u.id)?.overall_progress !== 100).slice(0, 6).map((unit) => {
                 const prog = getUnitProgress(unit.id);
                 return (
                   <Link
@@ -205,10 +219,7 @@ export default function StudentDashboard({ user }) {
 
         {/* Quick actions */}
         <section className="animate-fade-in">
-          <h2 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-            <Zap className="w-5 h-5 text-primary" />
-            Quick Actions
-          </h2>
+          <SectionHeading>Quick Actions</SectionHeading>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Link to="/sandbox" className="bg-navy hover:bg-navy-light border border-white/10 hover:border-primary/30 rounded-2xl p-5 transition-all group">
               <Code2 className="w-7 h-7 text-primary mb-3" />
