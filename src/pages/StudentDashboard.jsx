@@ -117,12 +117,12 @@ export default function StudentDashboard({ user }) {
               {announcements.map((ann) => (
                 <div
                   key={ann.id}
-                  className={`bg-card border rounded-xl p-4 flex gap-4 items-start ${
+                  className={`bg-card border rounded-xl p-4 h-fit flex gap-4 items-start ${
                     ann.is_pinned ? "border-primary/40 bg-primary/5" : "border-border"
                   }`}
                 >
                   {/* {ann.is_pinned && <Pin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />} */}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 h-fit">
                     <div className="flex items-center gap-2 mb-1">
                       {/* <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
                         ann.type === "important" ? "bg-red-500/20 text-red-400 border-red-500/30" :
@@ -134,7 +134,7 @@ export default function StudentDashboard({ user }) {
                       <span className="text-xs text-muted-foreground">{ann.author_name}</span>
                     </div>
                     <h3 className="font-semibold text-foreground text-sm">{ann.title}</h3>
-                    <div className="text-muted-foreground text-sm mt-1 line-clamp-2"
+                    <div className="rich-text text-muted-foreground text-sm mt-1"
                       dangerouslySetInnerHTML={{ __html: ann.content }} />
                     {ann.image_url && (
                       <img src={ann.image_url} alt="" className="mt-3 rounded-lg max-h-40 object-cover" />

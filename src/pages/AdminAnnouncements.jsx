@@ -230,7 +230,7 @@ export default function AdminAnnouncements({ user }) {
                       {!ann.is_published && <span className="text-xs text-muted-foreground">(Draft)</span>}
                     </div>
                     <h3 className="font-bold text-foreground text-sm">{ann.title}</h3>
-                    <div className="text-muted-foreground text-xs mt-1 line-clamp-2" dangerouslySetInnerHTML={{ __html: ann.content }} />
+                    <div className="rich-text text-muted-foreground text-xs mt-1 line-clamp-2" dangerouslySetInnerHTML={{ __html: ann.content }} />
                     {ann.image_url && <img src={ann.image_url} alt="" className="mt-2 rounded-lg max-h-32 object-cover" />}
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">

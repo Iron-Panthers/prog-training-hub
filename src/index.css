@@ -88,3 +88,107 @@
   width: 0;
   height: 0;
 }
+
+/*
+ * Tailwind's preflight strips headings, lists and links back to plain text so
+ * that utility classes are the only source of styling. Announcement bodies are
+ * admin-authored HTML injected with dangerouslySetInnerHTML, which never gets
+ * those utilities, so `.rich-text` puts the defaults back for that subtree.
+ */
+.rich-text > :first-child {
+  margin-top: 0;
+}
+
+.rich-text > :last-child {
+  margin-bottom: 0;
+}
+
+.rich-text h1,
+.rich-text h2,
+.rich-text h3,
+.rich-text h4,
+.rich-text h5,
+.rich-text h6 {
+  color: hsl(var(--foreground));
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 1.2em 0 0.5em;
+}
+
+.rich-text h1 { font-size: 1.5em; }
+.rich-text h2 { font-size: 1.3em; }
+.rich-text h3 { font-size: 1.15em; }
+.rich-text h4,
+.rich-text h5,
+.rich-text h6 { font-size: 1em; }
+
+.rich-text p {
+  margin: 0.6em 0;
+}
+
+.rich-text ul,
+.rich-text ol {
+  margin: 0.6em 0;
+  padding-left: 1.5em;
+}
+
+.rich-text ul { list-style: disc; }
+.rich-text ol { list-style: decimal; }
+.rich-text li { margin: 0.2em 0; }
+
+.rich-text a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}
+
+.rich-text strong,
+.rich-text b {
+  color: hsl(var(--foreground));
+  font-weight: 700;
+}
+
+.rich-text em,
+.rich-text i {
+  font-style: italic;
+}
+
+.rich-text code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  background: hsl(var(--muted));
+  border-radius: 0.25rem;
+  padding: 0.1em 0.35em;
+}
+
+.rich-text pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  background: hsl(var(--muted));
+  border-radius: 0.5rem;
+  padding: 0.75em 1em;
+  margin: 0.6em 0;
+  overflow-x: auto;
+}
+
+.rich-text pre code {
+  background: none;
+  padding: 0;
+}
+
+.rich-text blockquote {
+  border-left: 2px solid hsl(var(--border));
+  padding-left: 0.9em;
+  margin: 0.6em 0;
+}
+
+.rich-text hr {
+  border: 0;
+  border-top: 1px solid hsl(var(--border));
+  margin: 1em 0;
+}
+
+.rich-text img {
+  max-width: 100%;
+  border-radius: 0.5rem;
+  margin: 0.6em 0;
+}
