@@ -63,26 +63,26 @@ export default function StudentDashboard({ user }) {
                 {user?.name?.split(" ")[0]} <span className="text-orange"></span>
               </h1>
             </div>
-            <Link
+            {/* <Link
               to="/sandbox"
               className="hidden md:flex items-center gap-2 bg-primary/60 hover:bg-primary/70 text-white border border-primary/40 shadow-[0_0_8px_-2px] shadow-primary/40 font-semibold px-5 py-2.5 rounded-xl transition-all hover:scale-105"
             >
               <Code2 className="w-4 h-4" />
               Open Sandbox
-            </Link>
+            </Link> */}
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-4 mt-8">
+          <div className="grid grid-cols-3 gap-4 mt-5">
             {[
               { label: "Overall Progress", value: `${totalProgress}%`, icon: TrendingUp, color: "text-primary" },
-              { label: "Units Completed", value: `${completedUnits}/${units.length}`, icon: Trophy, color: "text-gold" },
-              { label: "Active Units", value: `${units.length - completedUnits}`, icon: BookOpen, color: "text-blue-400" },
+              { label: "Units Completed", value: `${completedUnits}/${units.length}`, icon: Trophy, color: "text-primary" },
+              { label: "Active Units", value: `${units.length - completedUnits}`, icon: BookOpen, color: "text-primary" },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white/5 border border-white/10 rounded-2xl p-4">
-                <stat.icon className={`w-5 h-5 ${stat.color} mb-2`} />
-                <p className="text-2xl font-black text-white">{stat.value}</p>
-                <p className="text-white/40 text-xs mt-0.5">{stat.label}</p>
+              <div key={stat.label} className="relative bg-white/5 border border-white/10 rounded-2xl p-4">
+                <stat.icon className={`absolute w-5 h-5 ${stat.color} mb-2`} />
+                <p className="text-2xl text-center font-black text-white">{stat.value}</p>
+                <p className="text-white/40 text-center text-xs mt-0.5">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -166,15 +166,15 @@ export default function StudentDashboard({ user }) {
                   <Link
                     key={unit.id}
                     to={`/units/${unit.id}`}
-                    className="bg-card border border-border hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 group block"
+                    className="relative bg-card border border-border hover:border-primary/40 rounded-2xl p-5 transition-all duration-200 group block"
                   >
-                    <div className="flex items-start justify-between mb-0">
+                    <div className="flex absolute right-5 mb-0">
                       {/* <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
                         {topicLabels[unit.topic] || unit.topic}
                       </span> */}
                       {prog === 100 && (
-                        <span className="text-xs text-green-400 font-semibold flex items-center gap-1">
-                          <Trophy className="w-3 h-3" /> Done
+                        <span className="text-xs text-primary font-semibold flex items-center gap-1">
+                          <Trophy className="w-3 h-3" /> Completed
                         </span>
                       )}
                     </div>

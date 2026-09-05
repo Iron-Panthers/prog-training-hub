@@ -112,15 +112,15 @@ export default function UnitsPage({ user }) {
                 <Link
                   key={unit.id}
                   to={`/units/${unit.id}`}
-                  className="bg-card border border-border hover:border-orange/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-orange/10 group block animate-fade-in"
+                  className="relative bg-card border border-border hover:border-orange/40 rounded-2xl p-5 transition-all duration-200 hover:shadow-lg hover:shadow-orange/10 group block animate-fade-in"
                   style={{ animationDelay: `${i * 50}ms` }}
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="absolute right-5">
                     {/* <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${topicColors[unit.topic] || topicColors["basics"]}`}>
                       {topicLabels[unit.topic] || unit.topic}
                     </span> */}
                     {prog === 100 && (
-                      <span className="text-xs text-green-400 font-semibold flex items-center gap-1">
+                      <span className="text-xs text-primary font-semibold flex items-center gap-1">
                         <Trophy className="w-3 h-3" /> Complete
                       </span>
                     )}
@@ -149,7 +149,7 @@ export default function UnitsPage({ user }) {
                     </div>
                     <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-orange to-orange-light rounded-full transition-all duration-500"
+                        className="h-full bg-primary rounded-full transition-all duration-500"
                         style={{ width: `${prog}%` }}
                       />
                     </div>
