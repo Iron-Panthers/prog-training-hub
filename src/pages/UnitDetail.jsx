@@ -32,7 +32,7 @@ export default function UnitDetail({ user }) {
     ]).then(([units, progs, quizSubmissions]) => {
       setUnit(units[0] || null);
       setProgress(progs[0] || null);
-      setQuizSubmission(quizSubmissions.reduce((max, c) => c.score > max.score ? c : max));
+      if (quizSubmissions.length > 0) setQuizSubmission(quizSubmissions.reduce((max, c) => c.score > max.score ? c : max));
       setLoading(false);
     });
   }, [id, user]);
