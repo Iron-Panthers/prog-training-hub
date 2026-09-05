@@ -9,6 +9,7 @@ export default function JavaIDE({
   initialCode = "",
   onComplete,
   showCompleteButton = true,
+  exerciseCompleted = false,
   height = "300px",
   storageKey = null,
   expandUrl = null,
@@ -26,7 +27,6 @@ export default function JavaIDE({
   const [activeFile, setActiveFile] = useState(0);
   const [output, setOutput] = useState("");
   const [running, setRunning] = useState(false);
-  const [completed, setCompleted] = useState(false);
   const [error, setError] = useState(null);
   const [confirmingReset, setConfirmingReset] = useState(false);
 
@@ -96,7 +96,7 @@ export default function JavaIDE({
   };
 
   const handleComplete = () => {
-    setCompleted(true);
+    exerciseCompleted = true;
     onComplete?.();
   };
 
@@ -176,7 +176,7 @@ export default function JavaIDE({
       )}
 
       {/* Complete button */}
-      {showCompleteButton && !completed && (
+      {showCompleteButton && !exerciseCompleted && (
         <div className="px-4 py-3 bg-[#181825] border-t border-white/10">
           <button
             onClick={handleComplete}
@@ -186,7 +186,7 @@ export default function JavaIDE({
           </button>
         </div>
       )}
-      {completed && (
+      {exerciseCompleted && (
         <div className="px-4 py-3 bg-green-500/10 border-t border-green-500/20 flex items-center gap-2 text-green-400 text-xs font-semibold">
           <CheckCircle className="w-4 h-4" /> Exercise completed!
         </div>

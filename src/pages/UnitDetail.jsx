@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { Unit, StudentProgress } from "@/api/entities";
+import { Unit, StudentProgress, QuizSubmission } from "@/api/entities";
 import { ArrowLeft, BookOpen, Code2, HelpCircle, Rocket, CheckCircle } from "lucide-react";
 import JavaIDE from "@/components/JavaIDE";
 import QuizSection from "@/components/QuizSection";
@@ -20,6 +20,7 @@ export default function UnitDetail({ user }) {
   const id = params.id;
   const [unit, setUnit] = useState(null);
   const [progress, setProgress] = useState(null);
+  const [quizSubmission, setQuizSubmission] = useState(null);
   const [activeTab, setActiveTab] = useState("slideshow");
   const [loading, setLoading] = useState(true);
 
@@ -27,9 +28,11 @@ export default function UnitDetail({ user }) {
     Promise.all([
       Unit.filter({ id }),
       StudentProgress.filter({ student_id: user.id, unit_id: id }),
-    ]).then(([units, progs]) => {
+      QuizSubmission.filter({ student_id: user.id, unit_id: id }),
+    ]).then(([units, progs, quizSubmissions]) => {
       setUnit(units[0] || null);
       setProgress(progs[0] || null);
+      setQuizSubmission(quizSubmissions.reduce((max, c) => c.score > max.score ? c : max));
       setLoading(false);
     });
   }, [id, user]);
@@ -40,9 +43,12 @@ export default function UnitDetail({ user }) {
     recalcProgress(updated);
   };
 
+  // Only the changed fields go to the DB. Spreading the whole `progress` row
+  // back in would also resend the fields parseStudentProgress derives on read,
+  // which no longer match their column types.
   const upsertProgress = async (data) => {
     if (progress?.id) {
-      const updated = await StudentProgress.update(progress.id, { ...progress, ...data });
+      const updated = await StudentProgress.update(progress.id, data);
       setProgress(updated);
       return updated;
     } else {
@@ -118,7 +124,7 @@ export default function UnitDetail({ user }) {
           </div>
           <div className="mt-4 h-2 bg-white/10 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-orange to-orange-light rounded-full transition-all duration-700"
+              className="h-full bg-primary rounded-full transition-all duration-700"
               style={{ width: `${overallProg}%` }}
             />
           </div>
@@ -141,6 +147,7 @@ export default function UnitDetail({ user }) {
               >
                 <tab.icon className="w-4 h-4" />
                 {tab.label}
+                {tab.key === "exercises" && progress?.exercises_completed?.length >= unit.exercises?.length && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
                 {tab.key === "slideshow" && progress?.slideshow_completed && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
                 {tab.key === "quiz" && progress?.quiz_completed && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
                 {tab.key === "project" && allProjectsSubmitted && <CheckCircle className="w-3.5 h-3.5 text-green-400" />}
@@ -183,9 +190,11 @@ export default function UnitDetail({ user }) {
                 <JavaIDE
                   key={ex.id || i}
                   initialCode={ex.starter_code || `public class Exercise${i + 1} {\n    public static void main(String[] args) {\n        // Write your code here\n    }\n}`}
+                  exerciseCompleted={progress?.exercises_completed?.includes(ex.id || String(i))}
                   onComplete={() => {
                     const exId = ex.id || String(i);
                     const completed = [...(progress?.exercises_completed || [])];
+                    console.log(completed)
                     if (!completed.includes(exId)) {
                       completed.push(exId);
                       upsertProgress({ exercises_completed: completed }).then(recalcProgress);
@@ -202,10 +211,12 @@ export default function UnitDetail({ user }) {
             unit={unit}
             user={user}
             progress={progress}
+            quizSubmission={quizSubmission}
             onComplete={(score, total) => {
               upsertProgress({
                 quiz_completed: true,
                 quiz_attempts: (progress?.quiz_attempts || 0) + 1,
+                quiz_score: score
               }).then(recalcProgress);
             }}
           />

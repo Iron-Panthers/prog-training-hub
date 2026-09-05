@@ -56,7 +56,8 @@ export interface StudentProgress {
   slideshow_completed: boolean;
   exercises_completed: string[];
   quiz_attempts: number;
-  quiz_completed: number;
+  quiz_completed: boolean;
+  quiz_score: number;
   projects_submitted: string[];
   overall_progress: number;
 }

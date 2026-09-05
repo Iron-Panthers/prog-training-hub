@@ -62,7 +62,7 @@
  * @property {boolean} slideshow_completed
  * @property {string[]} exercises_completed
  * @property {number} quiz_attempts
- * @property {number} quiz_completed
+ * @property {boolean} quiz_completed
  * @property {string[]} projects_submitted
  * @property {number} overall_progress
  */
