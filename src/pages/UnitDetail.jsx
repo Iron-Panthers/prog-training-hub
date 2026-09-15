@@ -194,7 +194,6 @@ export default function UnitDetail({ user }) {
                   onComplete={() => {
                     const exId = ex.id || String(i);
                     const completed = [...(progress?.exercises_completed || [])];
-                    console.log(completed)
                     if (!completed.includes(exId)) {
                       completed.push(exId);
                       upsertProgress({ exercises_completed: completed }).then(recalcProgress);

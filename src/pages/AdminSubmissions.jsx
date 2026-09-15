@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ProjectSubmission, QuizSubmission, Unit } from "@/api/entities";
+import { ProjectSubmission, StudentProgress, QuizSubmission, Unit } from "@/api/entities";
 import { getProfile } from "@/lib/profiles";
+import { computeUnitProgress } from "@/lib/progress";
 import JavaIDE from "@/components/JavaIDE";
 import { ArrowLeft, MessageSquare, CheckCircle, AlertCircle, Clock, Send, Loader2 } from "lucide-react";
 import { formatDateValue } from "@/utils";
@@ -220,6 +221,20 @@ function SubmissionReview({ user }) {
     setStatus(s);
     await ProjectSubmission.update(sub.id, { status: s });
     setSub({ ...sub, status: s });
+
+    // Update projects_approved on the student's progress row and recalc
+    const [prog] = await StudentProgress.filter({ unit_id: sub.unit_id, student_id: sub.student_id });
+    if (prog) {
+      const prev = prog.projects_approved || [];
+      const projects_approved = s === "approved"
+        ? prev.includes(sub.project_id) ? prev : [...prev, sub.project_id]
+        : prev.filter(id => id !== sub.project_id);
+      const updated = { ...prog, projects_approved };
+      await StudentProgress.update(prog.id, {
+        projects_approved,
+        overall_progress: computeUnitProgress(unit, updated),
+      });
+    }
   };
 
   if (loading) return <div className="min-h-screen bg-background flex items-center justify-center"><div className="w-8 h-8 border-4 border-muted border-t-orange rounded-full animate-spin" /></div>;

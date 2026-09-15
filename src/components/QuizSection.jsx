@@ -3,7 +3,6 @@ import { QuizSubmission } from "@/api/entities";
 import { CheckCircle, XCircle, Trophy, RotateCcw } from "lucide-react";
 
 export default function QuizSection({ unit, user, progress, quizSubmission, onComplete }) {
-  console.log(quizSubmission)
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [score, setScore] = useState(0);

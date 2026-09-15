@@ -447,7 +447,7 @@ function StudentReport() {
     <div className="min-h-screen bg-background">
       <div className="bg-navy px-6 py-8 md:px-10">
         <div className="max-w-5xl mx-auto">
-          <Link to="/admin/roster" className="flex items-center gap-2 text-white/50 hover:text-white text-sm mb-4 w-fit transition-colors">
+          <Link to="/admin/roster/" className="flex items-center gap-2 text-white/50 hover:text-white text-sm mb-4 w-fit transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back to roster
           </Link>
           <div className="flex items-center gap-4">

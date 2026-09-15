@@ -1,0 +1,53 @@
+import { Unit, StudentProgress, ProjectSubmission } from "@/api/entities";
+import { computeUnitProgress } from "@/lib/progress";
+
+/**
+ * One-time migration: recompute every StudentProgress row so that
+ *   1. `projects_approved` is populated from actual approved ProjectSubmissions
+ *   2. `overall_progress` reflects the new per-exercise + approved-only formula
+ *
+ * Usage — call from the browser console or a temporary admin button:
+ *   import { migrateAllProgress } from "@/lib/migrateProgress";
+ *   await migrateAllProgress();
+ */
+export async function migrateAllProgress() {
+  const [units, allProgress, allSubmissions] = await Promise.all([
+    Unit.list("order", 200),
+    StudentProgress.list(undefined, 5000),
+    ProjectSubmission.list(undefined, 5000),
+  ]);
+
+  const unitMap = new Map(units.map(u => [u.id, u]));
+
+  // Build a lookup: (student_id, unit_id) → [approved project_ids]
+  const approvedMap = new Map();
+  for (const sub of allSubmissions) {
+    if (sub.status !== "approved") continue;
+    const key = `${sub.student_id}::${sub.unit_id}`;
+    if (!approvedMap.has(key)) approvedMap.set(key, []);
+    const list = approvedMap.get(key);
+    if (!list.includes(sub.project_id)) list.push(sub.project_id);
+  }
+
+  let updated = 0;
+  let skipped = 0;
+
+  for (const prog of allProgress) {
+    const unit = unitMap.get(prog.unit_id);
+    if (!unit) {
+      skipped++;
+      continue;
+    }
+
+    const key = `${prog.student_id}::${prog.unit_id}`;
+    const projects_approved = approvedMap.get(key) || [];
+    const patched = { ...prog, projects_approved };
+    const overall_progress = computeUnitProgress(unit, patched);
+
+    await StudentProgress.update(prog.id, { projects_approved, overall_progress });
+    updated++;
+  }
+
+  console.log(`Migration complete: ${updated} rows updated, ${skipped} skipped (missing unit).`);
+  return { updated, skipped };
+}

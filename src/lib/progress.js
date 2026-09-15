@@ -2,8 +2,9 @@ import { StudentProgress } from "@/api/entities";
 
 /**
  * Percentage of a unit a student has completed. Every piece of content the
- * unit actually has counts as one slot: the slideshow, the exercises as a
- * group, the quiz, and then each project individually.
+ * unit actually has counts as one slot: the slideshow, each exercise
+ * individually, the quiz, and each project individually (only approved
+ * projects count).
  */
 export function computeUnitProgress(unit, progress) {
   if (!unit) return 0;
@@ -15,21 +16,21 @@ export function computeUnitProgress(unit, progress) {
     if (progress?.slideshow_completed) score++;
   }
 
-  const exCount = unit.exercises?.length || 0;
-  if (exCount > 0) {
+  const completedExercises = progress?.exercises_completed || [];
+  (unit.exercises || []).forEach((ex, i) => {
     total++;
-    if ((progress?.exercises_completed?.length || 0) >= exCount) score++;
-  }
+    if (completedExercises.includes(ex.id || String(i))) score++;
+  });
 
   if (unit.quiz_questions?.length > 0) {
     total++;
     if (progress?.quiz_completed) score++;
   }
 
-  const submitted = progress?.projects_submitted || [];
+  const approved = progress?.projects_approved || [];
   (unit.projects || []).forEach(proj => {
     total++;
-    if (submitted.includes(proj.id)) score++;
+    if (approved.includes(proj.id)) score++;
   });
 
   return total > 0 ? Math.round((score / total) * 100) : 0;
