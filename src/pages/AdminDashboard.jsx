@@ -2,13 +2,28 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Unit, Announcement, ProjectSubmission, QuizSubmission } from "@/api/entities";
 import { getProfile } from "@/lib/profiles";
-import { BookOpen, Megaphone, ClipboardList, TrendingUp, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { migrateAllProgress } from "@/lib/migrateProgress";
+import { BookOpen, Megaphone, ClipboardList, TrendingUp, AlertCircle, CheckCircle, Clock, RefreshCw } from "lucide-react";
 import { formatDateValue } from "@/utils";
 
 export default function AdminDashboard({ user }) {
   const [stats, setStats] = useState({ units: 0, announcements: 0, submissions: 0, quizzes: 0 });
   const [recentSubmissions, setRecentSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [migrating, setMigrating] = useState(false);
+  const [migrateResult, setMigrateResult] = useState(null);
+
+  const runMigration = async () => {
+    setMigrating(true);
+    setMigrateResult(null);
+    try {
+      const result = await migrateAllProgress();
+      setMigrateResult({ success: true, ...result });
+    } catch (err) {
+      setMigrateResult({ success: false, error: err.message });
+    }
+    setMigrating(false);
+  };
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -90,6 +105,20 @@ export default function AdminDashboard({ user }) {
               <h3 className="font-bold text-foreground mb-1">Manage Units</h3>
               <p className="text-muted-foreground text-sm">Create and edit training units and content</p>
             </Link>
+            <button
+              onClick={runMigration}
+              disabled={migrating}
+              className="bg-card border border-border hover:border-orange/40 rounded-2xl p-6 transition-all group hover:shadow-lg hover:shadow-orange/10 text-left disabled:opacity-60"
+            >
+              <RefreshCw className={`w-8 h-8 text-orange mb-3 group-hover:scale-110 transition-transform ${migrating ? "animate-spin" : ""}`} />
+              <h3 className="font-bold text-foreground mb-1">Recalculate Progress</h3>
+              <p className="text-muted-foreground text-sm">
+                {migrating ? "Updating all student progress…" :
+                 migrateResult?.success ? `Done — ${migrateResult.updated} students updated` :
+                 migrateResult ? `Error: ${migrateResult.error}` :
+                 "Recompute all student progress from current data"}
+              </p>
+            </button>
           </div>
         </section>
 

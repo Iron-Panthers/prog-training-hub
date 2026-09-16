@@ -134,6 +134,7 @@ function parseStudentProgress(row: unknown): StudentProgressType {
       r.projects_submitted,
       r.project_submitted ? [LEGACY_PROJECT_ID] : [],
     ),
+    projects_approved: parseJSON<string[]>(r.projects_approved, []),
   } as StudentProgressType;
 }
 
