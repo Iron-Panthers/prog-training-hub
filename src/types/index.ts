@@ -15,6 +15,8 @@ export interface Announcement {
   type: "reminder" | "update" | "important";
   image_url: string;
   author_id: string;
+  author_name: string;
+  student_id: string | null;
   is_pinned: boolean;
   is_published: boolean;
   created_at: string;

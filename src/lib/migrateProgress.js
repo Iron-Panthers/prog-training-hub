@@ -1,4 +1,4 @@
-import { Unit, StudentProgress, ProjectSubmission } from "@/api/entities";
+import { Unit, StudentProgress, ProjectSubmission, Announcement } from "@/api/entities";
 import { computeUnitProgress } from "@/lib/progress";
 
 /**
@@ -48,6 +48,35 @@ export async function migrateAllProgress() {
     updated++;
   }
 
-  console.log(`Migration complete: ${updated} rows updated, ${skipped} skipped (missing unit).`);
-  return { updated, skipped };
+  // Create notifications for all returned/needs_revision projects
+  let notified = 0;
+  const returnedSubs = allSubmissions.filter(
+    s => s.status === "needs_revision" || s.status === "returned"
+  );
+
+  for (const sub of returnedSubs) {
+    const unit = unitMap.get(sub.unit_id);
+    const unitTitle = unit?.title || "a unit";
+    const project = unit?.projects?.find(p => p.id === sub.project_id);
+    const projectTitle = project?.title || "a project";
+    const lastComment = sub.admin_comments?.length
+      ? sub.admin_comments[sub.admin_comments.length - 1]
+      : null;
+
+    await Announcement.create({
+      title: `${projectTitle} needs revision`,
+      content: lastComment
+        ? `Your submission for <b>${unitTitle} — ${projectTitle}</b> needs revision. Latest feedback: "${lastComment.comment}"`
+        : `Your submission for <b>${unitTitle} — ${projectTitle}</b> has been returned for revision.`,
+      type: "reminder",
+      author_name: lastComment?.author_name || "Admin",
+      student_id: sub.student_id,
+      is_pinned: false,
+      is_published: true,
+    });
+    notified++;
+  }
+
+  console.log(`Migration complete: ${updated} rows updated, ${skipped} skipped, ${notified} notifications created.`);
+  return { updated, skipped, notified };
 }

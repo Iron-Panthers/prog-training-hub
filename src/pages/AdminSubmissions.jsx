@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ProjectSubmission, StudentProgress, QuizSubmission, Unit } from "@/api/entities";
+import { ProjectSubmission, StudentProgress, QuizSubmission, Unit, Announcement } from "@/api/entities";
 import { getProfile } from "@/lib/profiles";
 import { computeUnitProgress } from "@/lib/progress";
 import JavaIDE from "@/components/JavaIDE";
@@ -212,6 +212,21 @@ function SubmissionReview({ user }) {
       admin_comments: [...(sub.admin_comments || []), comment],
       status: status,
     });
+
+    // Notify the student via a targeted announcement
+    const projectTitle = project?.title || "a project";
+    const unitTitle = unit?.title || "a unit";
+    await Announcement.create({
+      title: `New feedback on ${projectTitle}`,
+      content: `${user.name} left a comment on your submission for <b>${unitTitle} — ${projectTitle}</b>: "${newComment.comment}"`,
+      type: "reminder",
+      author_id: user.id,
+      author_name: user.name,
+      student_id: sub.student_id,
+      is_pinned: false,
+      is_published: true,
+    });
+
     setSub(updated);
     setNewComment({ line_number: "", comment: "" });
     setAdding(false);

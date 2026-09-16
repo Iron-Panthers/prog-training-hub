@@ -114,7 +114,7 @@ export default function AdminDashboard({ user }) {
               <h3 className="font-bold text-foreground mb-1">Recalculate Progress</h3>
               <p className="text-muted-foreground text-sm">
                 {migrating ? "Updating all student progress…" :
-                 migrateResult?.success ? `Done — ${migrateResult.updated} students updated` :
+                 migrateResult?.success ? `Done — ${migrateResult.updated} updated, ${migrateResult.notified} notified` :
                  migrateResult ? `Error: ${migrateResult.error}` :
                  "Recompute all student progress from current data"}
               </p>

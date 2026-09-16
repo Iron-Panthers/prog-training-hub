@@ -43,11 +43,12 @@ export default function StudentDashboard({ user }) {
 
   useEffect(() => {
     Promise.all([
-      Announcement.filter({ is_published: true }, "-created_at", 5),
+      Announcement.filter({ is_published: true }, "-created_at", 50),
       Unit.filter({ is_published: true }, "order", 20),
       StudentProgress.filter({ student_id: user.id }),
     ]).then(([ann, u, prog]) => {
-      setAnnouncements(ann);
+      // Show global announcements (no student_id) + ones targeted to this student
+      setAnnouncements(ann.filter(a => !a.student_id || a.student_id === user.id).slice(0, 10));
       setUnits(u);
       setProgress(prog);
       setLoading(false);
