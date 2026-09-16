@@ -210,10 +210,9 @@ function SubmissionReview({ user }) {
     };
     const updated = await ProjectSubmission.update(sub.id, {
       admin_comments: [...(sub.admin_comments || []), comment],
-      status: status,
     });
 
-    // Notify the student via a targeted announcement
+    // Notify the student about the comment
     const projectTitle = project?.title || "a project";
     const unitTitle = unit?.title || "a unit";
     await Announcement.create({
@@ -233,6 +232,7 @@ function SubmissionReview({ user }) {
   };
 
   const updateStatus = async (s) => {
+    const prevStatus = status;
     setStatus(s);
     await ProjectSubmission.update(sub.id, { status: s });
     setSub({ ...sub, status: s });
@@ -248,6 +248,28 @@ function SubmissionReview({ user }) {
       await StudentProgress.update(prog.id, {
         projects_approved,
         overall_progress: computeUnitProgress(unit, updated),
+      });
+    }
+
+    // Notify student on meaningful status changes
+    const projectTitle = project?.title || "a project";
+    const unitTitle = unit?.title || "a unit";
+    if (s !== prevStatus && (s === "approved" || s === "needs_revision")) {
+      const title = s === "approved"
+        ? `${projectTitle} approved!`
+        : `${projectTitle} needs revision`;
+      const content = s === "approved"
+        ? `Your submission for <b>${unitTitle} — ${projectTitle}</b> has been approved.`
+        : `Your submission for <b>${unitTitle} — ${projectTitle}</b> has been returned for revision.`;
+      await Announcement.create({
+        title,
+        content,
+        type: s === "approved" ? "update" : "reminder",
+        author_id: user.id,
+        author_name: user.name,
+        student_id: sub.student_id,
+        is_pinned: false,
+        is_published: true,
       });
     }
   };
