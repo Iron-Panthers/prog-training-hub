@@ -43,7 +43,7 @@ export default function StudentDashboard({ user }) {
 
   useEffect(() => {
     Promise.all([
-      Announcement.filter({ is_published: true }, "-created_at", 50),
+      Announcement.filter({ is_published: true }, "-created_at"),
       Unit.filter({ is_published: true }, "order", 20),
       StudentProgress.filter({ student_id: user.id }),
     ]).then(([ann, u, prog]) => {

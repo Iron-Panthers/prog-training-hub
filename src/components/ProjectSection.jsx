@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { ProjectSubmission } from "@/api/entities";
 import { resolveProjectStorageKey } from "@/lib/projectFiles";
-import { Rocket, CheckCircle, Send, List, AlertCircle } from "lucide-react";
+import { Rocket, CheckCircle, Send, List, AlertCircle, MessageSquare } from "lucide-react";
+import { formatDateValue } from "@/utils";
 import JavaIDE from "@/components/JavaIDE";
 
 const DEFAULT_STARTER = `public class Project {\n    public static void main(String[] args) {\n        // Your project code here\n    }\n}`;
@@ -12,7 +13,7 @@ export default function ProjectSection({ unit, project, user, progress, onSubmit
   const [justSubmitted, setJustSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [confirmingSubmit, setConfirmingSubmit] = useState(false);
-  const [latestStatus, setLatestStatus] = useState(null);
+  const [latestSub, setLatestSub] = useState(null);
 
   const [storageKey] = useState(() => resolveProjectStorageKey(unit.id, project.id));
 
@@ -20,10 +21,11 @@ export default function ProjectSection({ unit, project, user, progress, onSubmit
   useEffect(() => {
     if (!progress?.projects_submitted?.includes(project.id)) return;
     ProjectSubmission.filter({ student_id: user.id, unit_id: unit.id, project_id: project.id }, "-created_at", 1)
-      .then(([sub]) => { if (sub) setLatestStatus(sub.status); });
+      .then(([sub]) => { if (sub) setLatestSub(sub); });
   }, [user.id, unit.id, project.id, progress]);
 
-  const needsRevision = latestStatus === "needs_revision" || latestStatus === "returned";
+  const needsRevision = latestSub?.status === "needs_revision" || latestSub?.status === "returned";
+  const comments = latestSub?.admin_comments || [];
   const submitted = !needsRevision && (justSubmitted || progress?.projects_submitted?.includes(project.id) || false);
 
   const handleSubmit = async () => {
@@ -65,12 +67,29 @@ export default function ProjectSection({ unit, project, user, progress, onSubmit
   return (
     <div className="animate-fade-in space-y-6">
       {needsRevision && (
-        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm font-semibold text-red-400">Revision Requested</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Your teacher has returned this project for changes. Review their feedback, update your code, and resubmit.</p>
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 space-y-3">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-sm font-semibold text-red-400">Revision Requested</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Your teacher has returned this project for changes. Review their feedback below, update your code, and resubmit.</p>
+            </div>
           </div>
+          {comments.length > 0 && (
+            <div className="space-y-2 ml-8">
+              {comments.map(c => (
+                <div key={c.id} className="bg-background/50 border border-border rounded-lg px-3 py-2">
+                  {c.line_number && (
+                    <span className="text-xs bg-orange/20 text-orange px-1.5 py-0.5 rounded font-mono mr-2">
+                      Line {c.line_number}
+                    </span>
+                  )}
+                  <p className="text-sm text-foreground mt-1">{c.comment}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{c.author_name} · {formatDateValue(c.created_at)}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
       <div className="bg-card border border-border rounded-2xl p-6">

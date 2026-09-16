@@ -10,6 +10,7 @@ import {
 import {
   ArrowLeft, BarChart3, Search, ChevronRight, BookOpen,
   ClipboardList, HelpCircle, Users, Code2, Presentation,
+  CheckCircle, AlertCircle, Clock,
 } from "lucide-react";
 
 const SegmentBar = ({ counts, total }) => (
@@ -288,6 +289,7 @@ function UnitReport() {
   }
 
   const { unit } = state;
+  const profileMap = new Map(state.profiles.map(p => [p.id, p]));
   const studentIds = new Set(state.profiles.filter(isStudent).map(p => p.id));
   const progress = studentRows(state.progress, studentIds);
   const projects = studentRows(state.projects, studentIds);
@@ -411,6 +413,27 @@ function UnitReport() {
                       <>
                         <SegmentBar counts={buckets} total={subs.length} />
                         <SegmentLegend counts={buckets} total={subs.length} />
+                        <div className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
+                          {/* Show latest submission per student */}
+                          {[...new Map(subs.map(s => [s.student_id, s])).values()].map(sub => {
+                            const name = profileMap.get(sub.student_id)?.name || "Unknown";
+                            const icon = sub.status === "approved"
+                              ? <CheckCircle className="w-3 h-3 text-green-400" />
+                              : sub.status === "needs_revision" || sub.status === "returned"
+                              ? <AlertCircle className="w-3 h-3 text-red-400" />
+                              : <Clock className="w-3 h-3 text-yellow-400" />;
+                            return (
+                              <Link
+                                key={sub.id}
+                                to={`/admin/submissions/${sub.id}`}
+                                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-orange transition-colors"
+                              >
+                                {icon}
+                                <span>{name}</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
                       </>
                     )}
                   </div>
