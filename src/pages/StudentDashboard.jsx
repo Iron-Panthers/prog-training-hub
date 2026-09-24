@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Announcement, Unit, StudentProgress } from "@/api/entities";
-import { BookOpen, Code2, TrendingUp, ChevronRight, Pin, Trophy, Clock } from "lucide-react";
+import { BookOpen, Code2, TrendingUp, ChevronRight, Pin, Trophy, Clock, X } from "lucide-react";
 import CosmeticAvatar from "../components/CosmeticAvatar";
 
 const topicColors = {
@@ -37,6 +37,11 @@ function SectionHeading({ children, action }) {
 
 export default function StudentDashboard({ user }) {
   const [announcements, setAnnouncements] = useState([]);
+  const [hiddenIds, setHiddenIds] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(`hidden_reminders_${user.id}`) || "[]");
+    } catch { return []; }
+  });
   const [units, setUnits] = useState([]);
   const [progress, setProgress] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,6 +59,14 @@ export default function StudentDashboard({ user }) {
       setLoading(false);
     });
   }, [user]);
+
+  const hideReminder = (id) => {
+    const updated = [...hiddenIds, id];
+    setHiddenIds(updated);
+    localStorage.setItem(`hidden_reminders_${user.id}`, JSON.stringify(updated));
+  };
+
+  const visibleAnnouncements = announcements.filter(a => !hiddenIds.includes(a.id));
 
   const getUnitProgress = (unitId) => {
     const p = progress.find(p => p.unit_id === unitId);
@@ -111,27 +124,19 @@ export default function StudentDashboard({ user }) {
 
       <div className="max-w-6xl mx-auto px-6 md:px-10 py-8 space-y-8">
         {/* Announcements */}
-        {announcements.length > 0 && (
+        {visibleAnnouncements.length > 0 && (
           <section className="animate-fade-in">
             <SectionHeading>Updates &amp; Reminders</SectionHeading>
             <div className="space-y-3">
-              {announcements.map((ann) => (
+              {visibleAnnouncements.map((ann) => (
                 <div
                   key={ann.id}
                   className={`bg-card border rounded-xl p-4 h-fit flex gap-4 items-start ${
                     ann.is_pinned ? "border-primary/40 bg-primary/5" : "border-border"
                   }`}
                 >
-                  {/* {ann.is_pinned && <Pin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />} */}
                   <div className="flex-1 min-w-0 h-fit">
                     <div className="flex items-center gap-2 mb-1">
-                      {/* <span className={`text-xs font-semibold px-2 py-0.5 rounded-full border ${
-                        ann.type === "important" ? "bg-red-500/20 text-red-400 border-red-500/30" :
-                        ann.type === "reminder" ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" :
-                        "bg-blue-500/20 text-blue-400 border-blue-500/30"
-                      }`}>
-                        {ann.type?.toUpperCase()}
-                      </span> */}
                       <span className="text-xs text-muted-foreground">{ann.author_name}</span>
                     </div>
                     <h3 className="font-semibold text-foreground text-sm">{ann.title}</h3>
@@ -141,6 +146,15 @@ export default function StudentDashboard({ user }) {
                       <img src={ann.image_url} alt="" className="mt-3 rounded-lg max-h-40 object-cover" />
                     )}
                   </div>
+                  {ann.student_id && (
+                    <button
+                      onClick={() => hideReminder(ann.id)}
+                      className="p-1 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all flex-shrink-0"
+                      title="Dismiss"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
